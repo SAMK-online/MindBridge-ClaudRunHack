@@ -649,6 +649,213 @@
             transform: translateY(-2px);
         }
 
+        /* Category Modal */
+        .category-modal {
+            background: linear-gradient(180deg, rgba(16, 19, 46, 0.95), rgba(16, 19, 46, 0.85));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .category-modal h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .category-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(66, 133, 244, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .category-card.selected {
+            background: rgba(66, 133, 244, 0.25);
+            border-color: rgba(66, 133, 244, 0.8);
+            box-shadow: 0 0 20px rgba(66, 133, 244, 0.4);
+            transform: scale(1.05);
+        }
+
+        .category-card.recommended {
+            border-color: rgba(52, 168, 83, 0.6);
+            background: rgba(52, 168, 83, 0.1);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .category-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-card p {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            line-height: 1.4;
+        }
+
+        /* Time Slot Modal */
+        .slot-modal {
+            background: linear-gradient(180deg, rgba(16, 19, 46, 0.95), rgba(16, 19, 46, 0.85));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .slot-modal h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .slot-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .slot-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(66, 133, 244, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .slot-card.selected {
+            background: rgba(66, 133, 244, 0.25);
+            border-color: rgba(66, 133, 244, 0.8);
+            box-shadow: 0 0 20px rgba(66, 133, 244, 0.4);
+        }
+
+        .slot-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .slot-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .slot-card p {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* Confirmation Modal */
+        .confirmation-modal {
+            background: linear-gradient(180deg, rgba(16, 19, 46, 0.95), rgba(16, 19, 46, 0.85));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            animation: modalSlideIn 0.3s ease;
+            text-align: center;
+        }
+
+        .success-animation {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .confirmation-modal h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #34a853;
+        }
+
+        .booking-details {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            opacity: 0.7;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #4285f4;
+        }
+
+        .email-notice {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 1rem;
+        }
+
         /* Loading States */
         .loading-spinner {
             display: inline-block;
@@ -967,6 +1174,177 @@
         </div>
     </div>
 
+    <!-- Category Selection Modal -->
+    <div id="categoryModal" class="modal-overlay hidden">
+        <div class="category-modal">
+            <h2>🎯 Select Counselor Type</h2>
+            <p class="subtitle">Based on our conversation, we recommend: <strong id="recommendedCategory" style="color: #4285f4;"></strong></p>
+            <p class="subtitle" style="font-size: 0.9rem; opacity: 0.7;">You're free to choose any type that feels right for you.</p>
+            
+            <div class="category-grid">
+                <div class="category-card" data-category="depression">
+                    <span class="category-icon">😔</span>
+                    <h3>Depression</h3>
+                    <p>Persistent sadness, hopelessness</p>
+                </div>
+                
+                <div class="category-card" data-category="anxiety">
+                    <span class="category-icon">😰</span>
+                    <h3>Anxiety</h3>
+                    <p>Worry, panic, social anxiety</p>
+                </div>
+                
+                <div class="category-card" data-category="career">
+                    <span class="category-icon">💼</span>
+                    <h3>Career</h3>
+                    <p>Work stress, burnout, transitions</p>
+                </div>
+                
+                <div class="category-card" data-category="marriage">
+                    <span class="category-icon">💑</span>
+                    <h3>Relationships</h3>
+                    <p>Couples, family, communication</p>
+                </div>
+                
+                <div class="category-card" data-category="adhd">
+                    <span class="category-icon">🧩</span>
+                    <h3>ADHD</h3>
+                    <p>Focus, attention, organization</p>
+                </div>
+                
+                <div class="category-card" data-category="trauma">
+                    <span class="category-icon">💔</span>
+                    <h3>Trauma</h3>
+                    <p>Past abuse, PTSD, healing</p>
+                </div>
+                
+                <div class="category-card" data-category="addiction">
+                    <span class="category-icon">🚭</span>
+                    <h3>Addiction</h3>
+                    <p>Substance abuse, recovery</p>
+                </div>
+                
+                <div class="category-card" data-category="grief">
+                    <span class="category-icon">🕊️</span>
+                    <h3>Grief</h3>
+                    <p>Loss, bereavement, coping</p>
+                </div>
+                
+                <div class="category-card" data-category="general">
+                    <span class="category-icon">🌟</span>
+                    <h3>General</h3>
+                    <p>Life coaching, wellness</p>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn confirm" onclick="confirmCategory()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time Slot Selection Modal -->
+    <div id="slotModal" class="modal-overlay hidden">
+        <div class="slot-modal">
+            <h2>📅 When would you like to meet?</h2>
+            <p class="subtitle">Select your preferred time for the first session</p>
+            
+            <div class="slot-grid">
+                <div class="slot-card" data-slot="monday_morning">
+                    <span class="slot-icon">🌅</span>
+                    <h4>Monday Morning</h4>
+                    <p>9 AM - 12 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="monday_afternoon">
+                    <span class="slot-icon">☀️</span>
+                    <h4>Monday Afternoon</h4>
+                    <p>1 PM - 5 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="monday_evening">
+                    <span class="slot-icon">🌆</span>
+                    <h4>Monday Evening</h4>
+                    <p>6 PM - 9 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="wednesday_morning">
+                    <span class="slot-icon">🌅</span>
+                    <h4>Wednesday Morning</h4>
+                    <p>9 AM - 12 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="wednesday_afternoon">
+                    <span class="slot-icon">☀️</span>
+                    <h4>Wednesday Afternoon</h4>
+                    <p>1 PM - 5 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="wednesday_evening">
+                    <span class="slot-icon">🌆</span>
+                    <h4>Wednesday Evening</h4>
+                    <p>6 PM - 9 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="friday_afternoon">
+                    <span class="slot-icon">☀️</span>
+                    <h4>Friday Afternoon</h4>
+                    <p>1 PM - 5 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="saturday_morning">
+                    <span class="slot-icon">🌅</span>
+                    <h4>Saturday Morning</h4>
+                    <p>10 AM - 1 PM</p>
+                </div>
+                
+                <div class="slot-card" data-slot="sunday_afternoon">
+                    <span class="slot-icon">☀️</span>
+                    <h4>Sunday Afternoon</h4>
+                    <p>2 PM - 5 PM</p>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeSlotModal()">Back</button>
+                <button class="modal-btn confirm" onclick="confirmSlot()">Book Session</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div id="confirmationModal" class="modal-overlay hidden">
+        <div class="confirmation-modal">
+            <div class="success-animation">✅</div>
+            <h2>Session Booked!</h2>
+            
+            <div class="booking-details">
+                <div class="detail-row">
+                    <span class="detail-label">Therapist:</span>
+                    <span class="detail-value" id="bookedTherapist"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Specialization:</span>
+                    <span class="detail-value" id="bookedCategory"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Time:</span>
+                    <span class="detail-value" id="bookedTime"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Privacy:</span>
+                    <span class="detail-value" id="bookedPrivacy"></span>
+                </div>
+            </div>
+            
+            <p class="email-notice">📧 Confirmation details have been sent to your email</p>
+            
+            <div class="modal-actions">
+                <button class="modal-btn confirm" onclick="closeConfirmation()">Continue</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // State
         let sessionId = null;
@@ -1208,6 +1586,23 @@
                     
                     // Update agent status
                     updateAgentStatus(data.current_agent);
+                    
+                    // Check if intake is complete and crisis assessment is done - trigger category modal
+                    if (data.workflow_complete === false && 
+                        data.current_agent === 'crisis' &&
+                        lastMessage.content.includes('Does that sound right')) {
+                        // Crisis agent has made recommendation, show category modal
+                        setTimeout(() => {
+                            // Get recommended category from backend
+                            fetch(`/session/${sessionId}`)
+                                .then(res => res.json())
+                                .then(sessionData => {
+                                    const recommended = sessionData.suggested_category || 'general';
+                                    showCategoryModal(recommended);
+                                })
+                                .catch(err => console.error('Error fetching session:', err));
+                        }, 3000); // Give user time to hear the message
+                    }
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -1243,7 +1638,7 @@
                 }
                 
                 const utterance = new SpeechSynthesisUtterance(chunks[currentChunk].trim());
-                utterance.rate = 0.9;
+                utterance.rate = 1.5;
                 utterance.pitch = 1.0;
                 utterance.volume = 1.0;
                 
@@ -1284,7 +1679,7 @@
             }
             
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.9;
+            utterance.rate = 1.5;
             utterance.pitch = 1.0;
             utterance.volume = 1.0;
 
@@ -1539,11 +1934,85 @@
 
         function loadSchedules() {
             document.getElementById('schedulesView').innerHTML = `
-                <div style="text-align: center; padding: 4rem;">
-                    <h2 style="margin-bottom: 1rem;">Schedules Coming Soon</h2>
-                    <p style="opacity: 0.7;">Your therapy session schedules will appear here</p>
+                <div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+                    <h2 style="margin-bottom: 2rem;">Support Group Signup</h2>
+
+                    <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: #60A5FA;">Join an Anonymous Peer Support Group</h3>
+                        <p style="opacity: 0.8; line-height: 1.6; margin-bottom: 1.5rem;">
+                            Connect with others who understand what you're going through. Support groups provide a safe,
+                            judgment-free space to share experiences and receive encouragement.
+                        </p>
+
+                        <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: start; gap: 1rem;">
+                                <span style="font-size: 1.5rem;">👥</span>
+                                <div>
+                                    <strong>Peer Connection</strong>
+                                    <p style="opacity: 0.7; font-size: 0.9rem; margin-top: 0.25rem;">
+                                        Share with others facing similar challenges
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: start; gap: 1rem;">
+                                <span style="font-size: 1.5rem;">🔒</span>
+                                <div>
+                                    <strong>Completely Anonymous</strong>
+                                    <p style="opacity: 0.7; font-size: 0.9rem; margin-top: 0.25rem;">
+                                        Use any name you like - your privacy is protected
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: start; gap: 1rem;">
+                                <span style="font-size: 1.5rem;">📅</span>
+                                <div>
+                                    <strong>Weekly Video Meetings</strong>
+                                    <p style="opacity: 0.7; font-size: 0.9rem; margin-top: 0.25rem;">
+                                        Join sessions between your therapy appointments
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: start; gap: 1rem;">
+                                <span style="font-size: 1.5rem;">💙</span>
+                                <div>
+                                    <strong>Safe Space</strong>
+                                    <p style="opacity: 0.7; font-size: 0.9rem; margin-top: 0.25rem;">
+                                        Moderated by trained facilitators
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button
+                            onclick="joinSupportGroup()"
+                            style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                   border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;
+                                   font-size: 1rem; transition: transform 0.2s;"
+                            onmouseover="this.style.transform='scale(1.02)'"
+                            onmouseout="this.style.transform='scale(1)'">
+                            Join Waitlist
+                        </button>
+
+                        <p style="text-align: center; opacity: 0.6; font-size: 0.85rem; margin-top: 1rem;">
+                            You'll receive an email with details about the next meeting
+                        </p>
+                    </div>
+
+                    <div style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3B82F6; padding: 1rem; border-radius: 4px;">
+                        <p style="opacity: 0.9; font-size: 0.9rem;">
+                            <strong>Note:</strong> Support groups complement your therapy sessions and provide additional peer support
+                            while you connect with your specialist.
+                        </p>
+                    </div>
                 </div>
             `;
+        }
+
+        function joinSupportGroup() {
+            alert('Thank you for joining! You\'ll receive an email with details about the next support group meeting and how to join anonymously.');
         }
 
         // Privacy Modal Functions
@@ -1646,28 +2115,63 @@
 
         // Habit Tracker Integration
         function loadHabitTracker() {
-            if (!sessionId) {
-                document.getElementById('habitTrackerView').innerHTML = `
-                    <div style="text-align: center; padding: 4rem;">
-                        <h2 style="margin-bottom: 1rem;">Start a Conversation First</h2>
-                        <p style="opacity: 0.7;">Complete your conversation with Nima to get personalized habit recommendations.</p>
-                    </div>
-                `;
-                return;
+            // Show placeholder habits by default
+            const placeholderHabits = {
+                habits: [
+                    {
+                        id: "placeholder_1",
+                        name: "Two-minute breathing reset",
+                        description: "Pause mid-day to release tension from stacked commitments.",
+                        duration_minutes: 2,
+                        frequency: "daily",
+                        streak: 3
+                    },
+                    {
+                        id: "placeholder_2",
+                        name: "Evening brain dump",
+                        description: "Clear your mind before bed by jotting down tasks and worries.",
+                        duration_minutes: 5,
+                        frequency: "daily",
+                        streak: 2
+                    },
+                    {
+                        id: "placeholder_3",
+                        name: "Walk-and-reset",
+                        description: "Take a 15-minute walk after work to transition into study mode.",
+                        duration_minutes: 15,
+                        frequency: "daily",
+                        streak: 4
+                    },
+                    {
+                        id: "placeholder_4",
+                        name: "Next-day micro plan",
+                        description: "Set three priority actions for tomorrow before you log off.",
+                        duration_minutes: 3,
+                        frequency: "daily",
+                        streak: 1
+                    }
+                ]
+            };
+            
+            // Try to load real habits if session exists
+            if (sessionId) {
+                fetch(`/habits/${sessionId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.habits && data.habits.length > 0) {
+                            renderHabits(data);
+                        } else {
+                            renderHabits(placeholderHabits);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error loading habits:', err);
+                        renderHabits(placeholderHabits);
+                    });
+            } else {
+                // Show placeholders if no session
+                renderHabits(placeholderHabits);
             }
-
-            fetch(`/habits/${sessionId}`)
-                .then(res => res.json())
-                .then(data => renderHabits(data))
-                .catch(err => {
-                    console.error('Error loading habits:', err);
-                    document.getElementById('habitTrackerView').innerHTML = `
-                        <div style="text-align: center; padding: 4rem;">
-                            <h2 style="margin-bottom: 1rem;">No Habits Yet</h2>
-                            <p style="opacity: 0.7;">Complete your conversation to get recommendations.</p>
-                        </div>
-                    `;
-                });
         }
 
         function renderHabits(data) {
@@ -1703,7 +2207,7 @@
                             <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;">
                                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
                                     <h4 style="font-size: 1.1rem; font-weight: 600;">${habit.name}</h4>
-                                    <div style="background: rgba(67, 255, 163, 0.15); border: 1px solid rgba(67, 255, 163, 0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 600;">0 days streak</div>
+                                    <div style="background: rgba(67, 255, 163, 0.15); border: 1px solid rgba(67, 255, 163, 0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 600;">${habit.streak || 0} day${habit.streak !== 1 ? 's' : ''} streak</div>
                                 </div>
                                 <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin-bottom: 1rem;">${habit.description}</p>
                                 <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
@@ -1742,6 +2246,197 @@
                 console.error('Error:', error);
                 checkbox.checked = !completed;
             }
+        }
+
+        // Booking flow state
+        let selectedCategory = null;
+        // selectedPrivacyTier already declared above for privacy modal
+        let selectedSlot = null;
+        let recommendedCategory = null;
+        let matchedTherapist = null;
+
+        // Show category selection modal
+        function showCategoryModal(recommended) {
+            recommendedCategory = recommended;
+            document.getElementById('recommendedCategory').textContent = recommended.charAt(0).toUpperCase() + recommended.slice(1);
+            
+            // Highlight recommended category
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach(card => {
+                if (card.dataset.category === recommended) {
+                    card.classList.add('recommended');
+                }
+                card.addEventListener('click', function() {
+                    cards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedCategory = this.dataset.category;
+                });
+            });
+            
+            document.getElementById('categoryModal').classList.remove('hidden');
+        }
+
+        // Confirm category selection
+        function confirmCategory() {
+            if (!selectedCategory) {
+                showToast('warning', 'Select Category', 'Please select a counselor type');
+                return;
+            }
+            
+            document.getElementById('categoryModal').classList.add('hidden');
+            addMessage('nima', `Great choice! ${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} counseling it is. Now let's set your privacy preferences.`);
+            
+            // Show privacy modal after a brief delay
+            setTimeout(() => {
+                document.getElementById('privacyModal').classList.remove('hidden');
+            }, 500);
+        }
+
+        // Override confirmPrivacySelection to continue to slot picker
+        async function confirmPrivacySelection() {
+            console.log('Confirming privacy selection:', selectedPrivacyTier);
+            if (!selectedPrivacyTier) {
+                alert('Please select a privacy level first');
+                return;
+            }
+            try {
+                const response = await fetch('/privacy/set', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        privacy_tier: selectedPrivacyTier
+                    })
+                });
+                const data = await response.json();
+                console.log('Privacy API response:', data);
+                if (data.success) {
+                    console.log('Privacy set successfully, moving to slot selection...');
+                    closePrivacyModal();
+                    localStorage.setItem('privacy_set', 'true');
+                    localStorage.setItem('privacy_tier', selectedPrivacyTier);
+                    
+                    addMessage('nima', `Perfect! Your privacy is set. Now, let's pick a time for your first session.`);
+                    
+                    // Show slot picker after delay
+                    setTimeout(() => {
+                        document.getElementById('slotModal').classList.remove('hidden');
+                        
+                        // Setup slot selection
+                        const slotCards = document.querySelectorAll('.slot-card');
+                        slotCards.forEach(card => {
+                            card.addEventListener('click', function() {
+                                slotCards.forEach(c => c.classList.remove('selected'));
+                                this.classList.add('selected');
+                                selectedSlot = this.dataset.slot;
+                            });
+                        });
+                    }, 500);
+                } else {
+                    alert('Privacy setting failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error setting privacy:', error);
+                alert('Privacy setting failed. Please try again.');
+            }
+        }
+
+        // Close slot modal
+        function closeSlotModal() {
+            document.getElementById('slotModal').classList.add('hidden');
+            document.getElementById('privacyModal').classList.remove('hidden');
+        }
+
+        // Confirm slot selection and book session
+        async function confirmSlot() {
+            if (!selectedSlot) {
+                showToast('warning', 'Select Time', 'Please select a time slot');
+                return;
+            }
+            
+            // Book the session
+            try {
+                const response = await fetch('/book-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        category: selectedCategory,
+                        privacy_tier: selectedPrivacyTier,
+                        time_slot: selectedSlot
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('slotModal').classList.add('hidden');
+                    matchedTherapist = data.therapist;
+                    
+                    // Show confirmation modal
+                    document.getElementById('bookedTherapist').textContent = data.therapist.name;
+                    document.getElementById('bookedCategory').textContent = selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
+                    document.getElementById('bookedTime').textContent = selectedSlot.replace(/_/g, ' ');
+                    document.getElementById('bookedPrivacy').textContent = selectedPrivacyTier.replace(/_/g, ' ');
+                    
+                    document.getElementById('confirmationModal').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                showToast('error', 'Booking Failed', 'Please try again');
+            }
+        }
+
+        // Close confirmation and show habits
+        function closeConfirmation() {
+            document.getElementById('confirmationModal').classList.add('hidden');
+            
+            // Add confirmation message and show habits
+            addMessage('nima', `Perfect! Your session with ${matchedTherapist.name} is confirmed. I've sent the details to your email. While you wait for your first session, let me share some helpful habits you can start today...`);
+            
+            // Fetch and display habits
+            setTimeout(async () => {
+                try {
+                    const response = await fetch(`/habits/${sessionId}`);
+                    const data = await response.json();
+                    
+                    if (data.habits && data.habits.length > 0) {
+                        let habitsHtml = '<div class="habits-display"><h3>🌱 Daily Habits to Support Your Mental Health:</h3><div class="habits-list">';
+                        
+                        data.habits.forEach((habit, index) => {
+                            habitsHtml += `
+                                <div class="habit-item">
+                                    <div class="habit-icon">${index + 1}.</div>
+                                    <div class="habit-content">
+                                        <h4>${habit.name}</h4>
+                                        <p>${habit.description}</p>
+                                        <span class="habit-meta">${habit.duration_minutes} min • ${habit.frequency}</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        habitsHtml += '</div></div>';
+                        
+                        const habitsMessage = document.createElement('div');
+                        habitsMessage.className = 'message nima';
+                        habitsMessage.innerHTML = `
+                            <div class="message-label">NIMA AI</div>
+                            <div class="message-content">${habitsHtml}</div>
+                        `;
+                        messagesContainer.appendChild(habitsMessage);
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                    
+                    // Offer support group
+                    setTimeout(() => {
+                        addMessage('nima', 'Would you also like to join an anonymous peer support group? You can connect with others going through similar experiences. Just say "yes" if interested!');
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('Error fetching habits:', error);
+                }
+            }, 1000);
         }
 
         // Initial greeting

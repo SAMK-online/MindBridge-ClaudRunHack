@@ -3,7 +3,7 @@ Intake Agent - Empathetic Conversational Onboarding
 ==================================================
 
 This agent provides a warm, gradual introduction to the platform.
-
+  
 KEY PRINCIPLES:
 - Warm and friendly tone
 - No rushing - max 5 turns before offering help
@@ -40,7 +40,7 @@ class IntakeAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Nima (Intake)",
-            model_name="gemini-2.5-flash",  # Flash model works better for this use case
+            model_name="gemini-2.5-pro",  # Pro for better conversation flow and reasoning
             temperature=0.85,  # Warm and empathetic
             max_tokens=400  # Increased for deeper conversations
         )
@@ -73,6 +73,11 @@ Remember: Go deep, not surface level. Each response should build on what they've
         """
         print(f"🤝 {self.agent_name} processing...")
 
+        # Check if already complete - don't process again
+        if state.agent_data.get("intake_complete"):
+            print("✅ Intake already complete - skipping")
+            return state
+
         # Get current stage
         current_stage = state.agent_data.get("intake_stage", self.STAGE_GREETING)
 
@@ -98,11 +103,39 @@ Remember: Go deep, not surface level. Each response should build on what they've
         
         # Check if user has agreed to counselor matching
         last_message = self.get_last_user_message(state) or ""
-        user_agreed = any(word in last_message.lower() for word in ["yes", "absolutely", "sure", "ok", "okay", "please", "that would be helpful"])
+        user_agreed = any(word in last_message.lower() for word in ["yes", "absolutely", "sure", "ok", "okay", "please", "that would be helpful", "yep", "yeah", "connect"])
+
+        # Check if we've asked about counselor matching in the last 3 messages
+        asked_about_matching = False
+        messages_to_check = min(3, len(state.messages))
+        for msg in state.messages[-messages_to_check:]:
+            if msg.role == "assistant":
+                msg_lower = msg.content.lower()
+                if any(phrase in msg_lower for phrase in [
+                    "would you like me to match",
+                    "connecting with a professional counselor",
+                    "match you with someone",
+                    "counselor could really help",
+                    "connect you with",
+                    "find the best match"
+                ]):
+                    asked_about_matching = True
+                    break
+
+        print(f"🔍 User message: '{last_message[:50]}'")
+        print(f"🔍 Asked about matching: {asked_about_matching}, User agreed: {user_agreed}")
+
+        # If we asked about matching and user agreed, complete immediately!
+        if asked_about_matching and user_agreed and turn_count >= 2:
+            print("✅ User agreed to matching - completing intake immediately")
+            state.agent_data["intake_complete"] = True
+            state.agent_data["intake_stage"] = self.STAGE_READY
+            # Don't add another message - let Crisis Agent take over
+            return state
 
         # Build context based on stage - encourage deeper conversations
-        if turn_count >= 6 or (turn_count >= 5 and user_agreed):
-            context = "The user has agreed to counselor matching. Confirm you'll connect them with a professional counselor. Be brief and transition to the next step."
+        if turn_count >= 6 or (turn_count >= 4 and user_agreed):
+            context = "The user has agreed to counselor matching. Confirm briefly (ONE sentence only) that you'll connect them with a professional counselor."
             next_stage = self.STAGE_READY
         elif turn_count >= 4:
             context = "Go deeper into their experience. Ask about how this is affecting their daily life, relationships, or well-being. Show that you're really listening by referencing specific details they've shared."
@@ -149,15 +182,6 @@ Remember: Go deep, not surface level. Each response should build on what they've
         if next_stage == self.STAGE_READY:
             state.agent_data["intake_complete"] = True
             print("✅ Intake complete - ready for crisis assessment")
-            
-            # Add proactive handoff message
-            handoff_message = (
-                "\n\n---\n\n"
-                "💡 **Next Step**: I'm now connecting you with our Crisis Assessment team. "
-                "They'll evaluate your situation to ensure you're safe and determine the best type of support for you. "
-                "This is a standard part of our care process."
-            )
-            state = self.add_message(state, "assistant", handoff_message)
 
         return state
 

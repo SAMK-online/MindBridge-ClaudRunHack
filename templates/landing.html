@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindBridge - AI-Powered Mental Health Support | Cloud Run Hackathon</title>
+    <title>NimaAI - AI-Powered Mental Health Support | Cloud Run Hackathon</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
     <style>
         * {
@@ -305,14 +305,19 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             font-family: 'Courier New', monospace;
-            text-align: left;
+            text-align: center;
             overflow-x: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .architecture-diagram pre {
             color: rgba(67, 255, 163, 0.9);
             line-height: 1.8;
             font-size: 0.9rem;
+            text-align: left;
+            margin: 0 auto;
         }
 
         /* Stats */
@@ -487,18 +492,18 @@
                 🏆 Cloud Run Hackathon 2025 - AI Agents Category
             </div>
 
-            <h1>🧠 MindBridge</h1>
+            <h1>🧠 NimaAI</h1>
 
             <p>
-                AI-powered mental health support using autonomous multi-agent orchestration.
-                Built with Google Gemini and deployed on Cloud Run.
+                AI-powered mental health support with 6 autonomous agents, intelligent therapist matching, 
+                peer support groups, and interactive voice interface. Built with Google Gemini and deployed on Cloud Run.
             </p>
 
             <div class="hero-cta">
                 <a href="/app" class="btn btn-primary">
                     Try Live Demo →
                 </a>
-                <a href="https://github.com/SAMK-online/MindBridge-ClaudRunHack" target="_blank" class="btn btn-secondary">
+                <a href="https://github.com/SAMK-online/NimaAI-CloudRunHack" target="_blank" class="btn btn-secondary">
                     View Code on GitHub
                 </a>
             </div>
@@ -525,7 +530,7 @@
         <section class="features">
             <h2>Autonomous AI Agents</h2>
             <p class="features-subtitle">
-                Five specialized agents working together to provide comprehensive mental health support
+                Six specialized agents working together to provide comprehensive mental health support
             </p>
 
             <div class="features-grid">
@@ -544,13 +549,19 @@
                 <div class="feature-card">
                     <div class="feature-icon">🔍</div>
                     <h3>Resource Agent</h3>
-                    <p>Intelligent therapist matching using Gemini Pro for complex reasoning. Searches 9 specializations and autonomously recommends best matches.</p>
+                    <p>Intelligent therapist matching from 20-person database. Randomly selects qualified therapists across 9 specializations for personalized care.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">📊</div>
                     <h3>Habit Agent</h3>
-                    <p>Evidence-based therapeutic habits tailored to user needs. Deterministic recommendations with streak tracking and progress monitoring.</p>
+                    <p>Evidence-based therapeutic habits tailored to user needs. Provides 27 curated daily practices with streak tracking and progress monitoring.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Support Group Agent</h3>
+                    <p>Smart peer support matching across 11 groups. Considers personality, preferences, and meeting times to find the perfect group fit.</p>
                 </div>
 
                 <div class="feature-card">
@@ -562,7 +573,19 @@
                 <div class="feature-card">
                     <div class="feature-icon">🎤</div>
                     <h3>Voice Interface</h3>
-                    <p>Speech-to-text and text-to-speech integration. Beautiful animated orb provides real-time visual feedback during conversations.</p>
+                    <p>Speech-to-text and text-to-speech integration with 1.5x speed. Beautiful animated orb provides real-time visual feedback during conversations.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Interactive Booking</h3>
+                    <p>Visual modal-based booking flow. Select counselor type, privacy level, and time slots through beautiful, professional interfaces—no conversational loops!</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privacy Tiers</h3>
+                    <p>4-tier privacy system: Full Support, Assisted Handoff, Private Notes, or No Records. You control exactly what data is stored.</p>
                 </div>
             </div>
         </section>
@@ -577,33 +600,41 @@
 
                 <div class="architecture-diagram">
                     <pre>
-┌─────────────────────────────────────────────────┐
-│ Coordinator Agent (Gemini 2.5 Pro Thinking)   │
-│ • Workflow orchestration                       │
-│ • Agent routing & transitions                  │
-│ • State management                             │
-└────────────┬────────────────────────────────────┘
-             │
-    ┌────────┼────────┬───────────┬──────────┐
-    ▼        ▼        ▼           ▼          ▼
-┌──────────┐┌────────┐┌──────────┐┌────────┐
-│ Intake   ││Crisis  ││Resource  ││Habit   │
-│ Agent    ││Agent   ││Agent     ││Agent   │
-│          ││        ││          ││        │
-│Gemini    ││Gemini  ││Gemini    ││Gemini  │
-│2.5 Flash ││2.5     ││2.5 Pro   ││2.5     │
-│(Thinking)││Flash   ││(Thinking)││Flash   │
-└──────────┘└────────┘└──────────┘└────────┘
-     │           │          │          │
-     └───────────┴──────────┴──────────┘
-                    │
-            ┌───────▼────────┐
-            │  Cloud Run     │
-            │  • FastAPI     │
-            │  • Auto-scale  │
-            │  • 2GB RAM     │
-            │  • 2 vCPU      │
-            └────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│    Coordinator Agent (Gemini 2.5 Pro Thinking)          │
+│    • Workflow orchestration                              │
+│    • Agent routing & transitions                         │
+│    • State management                                    │
+└────────────────────┬─────────────────────────────────────┘
+                     │
+        ┌────────────┼────────────┬──────────┬──────────┐
+        ▼            ▼            ▼          ▼          ▼
+  ┌──────────┐ ┌──────────┐ ┌─────────┐ ┌────────┐ ┌──────────┐
+  │ Intake   │ │ Crisis   │ │Resource │ │ Habit  │ │ Support  │
+  │ Agent    │ │ Agent    │ │ Agent   │ │ Agent  │ │ Group    │
+  │          │ │          │ │         │ │        │ │ Agent    │
+  │ Gemini   │ │ Gemini   │ │ Gemini  │ │ Gemini │ │ Gemini   │
+  │ 2.5      │ │ 2.5      │ │ 2.5 Pro │ │ 2.5    │ │ 2.5      │
+  │ Flash    │ │ Flash    │ │(Thinking│ │ Flash  │ │ Flash    │
+  │(Thinking)│ │          │ │)        │ │        │ │          │
+  └──────────┘ └──────────┘ └─────────┘ └────────┘ └──────────┘
+       │             │            │           │           │
+       └─────────────┴────────────┴───────────┴───────────┘
+                                  │
+    ┌─────────────────────────────▼──────────────────────────┐
+    │                Interactive UI Layer                     │
+    │  • Voice Interface (Speech ↔ Text)                     │
+    │  • Visual Booking Modals (Category, Time, Privacy)     │
+    │  • Real-time Analytics Dashboard                       │
+    └─────────────────────────────┬──────────────────────────┘
+                                  │
+                    ┌─────────────▼─────────────┐
+                    │      Cloud Run            │
+                    │      • FastAPI            │
+                    │      • Auto-scale         │
+                    │      • 2GB RAM            │
+                    │      • 2 vCPU             │
+                    └───────────────────────────┘
                     </pre>
                 </div>
             </div>
@@ -613,8 +644,16 @@
         <section class="stats">
             <div class="stats-grid">
                 <div class="stat-item">
-                    <h3>5</h3>
+                    <h3>6</h3>
                     <p>Autonomous Agents</p>
+                </div>
+                <div class="stat-item">
+                    <h3>20</h3>
+                    <p>Therapists in Database</p>
+                </div>
+                <div class="stat-item">
+                    <h3>11</h3>
+                    <p>Support Groups</p>
                 </div>
                 <div class="stat-item">
                     <h3>9</h3>
@@ -635,14 +674,15 @@
         <section class="cta-section">
             <h2>Experience the Future of Mental Health Support</h2>
             <p>
-                Try MindBridge now and see how multi-agent AI orchestration can provide empathetic, intelligent support at scale.
+                Try NimaAI now with interactive booking, voice interface, smart peer matching, and 6 specialized AI agents 
+                working together to provide comprehensive, empathetic mental health support.
             </p>
 
             <div class="hero-cta">
                 <a href="/app" class="btn btn-primary">
                     Launch App →
                 </a>
-                <a href="https://github.com/SAMK-online/MindBridge-ClaudRunHack" target="_blank" class="btn btn-secondary">
+                <a href="https://github.com/SAMK-online/NimaAI-CloudRunHack" target="_blank" class="btn btn-secondary">
                     View Source Code
                 </a>
             </div>
@@ -651,13 +691,13 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-links">
-                <a href="https://github.com/SAMK-online/MindBridge-ClaudRunHack">GitHub</a>
+                <a href="https://github.com/SAMK-online/NimaAI-CloudRunHack">GitHub</a>
                 <a href="/app">Live Demo</a>
                 <a href="https://cloud.google.com/run">Cloud Run</a>
                 <a href="https://ai.google.dev/">Google Gemini</a>
             </div>
             <p>Built for Google Cloud Run Hackathon 2025 | AI Agents Category</p>
-            <p style="margin-top: 1rem; opacity: 0.4;">Project ID: nimacareai | Powered by Google Gemini & Cloud Run</p>
+            <p style="margin-top: 1rem; opacity: 0.4;">NimaAI - Powered by Google Gemini & Cloud Run</p>
         </footer>
     </div>
 

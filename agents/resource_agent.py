@@ -12,6 +12,9 @@ Powered by: Gemini 2.0 Flash thinking mode (complex reasoning for matching logic
 """
 
 from typing import List, Optional
+import json
+import random
+from pathlib import Path
 from .base_agent import BaseAgent, AgentState
 from models.therapist import Therapist, TherapistSpecialization
 
@@ -120,18 +123,18 @@ Keep response conversational (3-4 sentences)."""
         else:
             state.agent_data["therapist_match_found"] = False
 
-        state.agent_data["resource_complete"] = True
-
-        print("✅ Therapist matching complete")
-        
-        # Add proactive handoff message to Habit Agent
-        handoff_message = (
-            "\n\n---\n\n"
-            "💡 **Next Step**: Our Habit Coach will now recommend some evidence-based practices "
-            "to support you while you connect with your counselor. These simple daily habits "
-            "can make a real difference in your mental wellness journey."
-        )
-        state = self.add_message(state, "assistant", handoff_message)
+        # Only complete after user engages with therapist options
+        last_message = self.get_last_user_message(state)
+        if last_message and state.agent_data.get("therapists_presented"):
+            confirm_words = ["yes", "sounds good", "okay", "sure", "great", "thanks", "perfect"]
+            if any(word in last_message.lower() for word in confirm_words):
+                state.agent_data["resource_complete"] = True
+                print("✅ Therapist matching complete")
+            else:
+                print("⏳ Awaiting user response on therapist options")
+        else:
+            state.agent_data["therapists_presented"] = True
+            print("📋 Therapist options presented to user")
 
         return state
 
@@ -171,13 +174,28 @@ Keep response conversational (3-4 sentences)."""
 
         return issues if issues else ["general support"]
 
+    def _load_therapists_from_json(self) -> List[dict]:
+        """Load therapists from JSON database"""
+        json_path = Path(__file__).parent.parent / "data" / "therapists.json"
+        try:
+            with open(json_path, 'r') as f:
+                data = json.load(f)
+                return data.get("therapists", [])
+        except Exception as e:
+            print(f"Warning: Could not load therapists.json: {e}")
+            return []
+
     def _get_available_therapists(self, category_filter: Optional[str] = None) -> List[Therapist]:
         """
-        Get available therapists from database, filtered by category.
-        Mock data for demo - would query real DB in production.
+        Get available therapists from JSON database, filtered by category.
+        Randomly selects 2-3 therapists from matching pool.
         """
-        # Complete therapist database
-        all_therapists = [
+        # Load therapists from JSON
+        therapists_data = self._load_therapists_from_json()
+        
+        if not therapists_data:
+            # Fallback to minimal mock data if JSON fails
+            all_therapists = [
             # Depression specialists
             Therapist(
                 id="therapist_001",
@@ -287,6 +305,30 @@ Keep response conversational (3-4 sentences)."""
                 bio="General counselor providing holistic mental health support for various concerns."
             ),
         ]
+        else:
+            # Convert JSON data to Therapist objects
+            all_therapists = []
+            for t_data in therapists_data:
+                # Map string specs to TherapistSpecialization enum
+                specs = []
+                for spec_str in t_data.get("specializations", []):
+                    try:
+                        specs.append(TherapistSpecialization(spec_str))
+                    except ValueError:
+                        specs.append(TherapistSpecialization.GENERAL)
+                
+                therapist = Therapist(
+                    id=t_data.get("id"),
+                    name=t_data.get("name"),
+                    email=t_data.get("email"),
+                    specializations=specs,
+                    years_experience=t_data.get("years_experience", 5),
+                    status="active",
+                    max_patients=12,
+                    current_patients=random.randint(2, 8),  # Random availability
+                    bio=t_data.get("bio", "")
+                )
+                all_therapists.append(therapist)
 
         # Filter by category if specified
         if category_filter and category_filter != "general":
@@ -296,9 +338,16 @@ Keep response conversational (3-4 sentences)."""
                 spec_values = [s.value for s in therapist.specializations]
                 if category_filter in spec_values:
                     filtered.append(therapist)
+            
+            # Randomly select 2-3 therapists from matching pool
+            if filtered:
+                num_to_return = min(random.randint(2, 3), len(filtered))
+                return random.sample(filtered, num_to_return)
             return filtered
 
-        return all_therapists
+        # For general category, return 2-3 random therapists
+        num_to_return = min(random.randint(2, 3), len(all_therapists))
+        return random.sample(all_therapists, num_to_return)
 
     def _format_therapist_list(self, therapists: List[Therapist]) -> str:
         """Format therapist list for AI context"""

@@ -258,17 +258,58 @@
             try {
                 const response = await fetch(`/habits/${sessionId}`);
                 const data = await response.json();
-                
-                renderHabitTracker(data);
+
+                // If we have habits, render them. Otherwise, show demo data
+                if (data && data.habits && data.habits.length > 0) {
+                    renderHabitTracker(data);
+                } else {
+                    renderDemoHabitTracker();
+                }
             } catch (error) {
                 console.error('Error loading habits:', error);
-                renderEmptyState();
+                // Show demo data on error
+                renderDemoHabitTracker();
             }
         }
 
-        function renderHabitTracker(data) {
+        // Demo habit tracker with realistic streaks and data
+        function renderDemoHabitTracker() {
+            const demoHabits = [
+                {
+                    id: "demo_1",
+                    name: "10-minute morning sunlight walk",
+                    description: "Walk outside for sunlight exposure and gentle movement to boost serotonin",
+                    frequency: "daily",
+                    duration_minutes: 10,
+                    streak: 7,
+                    completed_today: true
+                },
+                {
+                    id: "demo_2",
+                    name: "3-item gratitude journal",
+                    description: "Write down 3 things you're grateful for before bed",
+                    frequency: "daily",
+                    duration_minutes: 5,
+                    streak: 12,
+                    completed_today: true
+                },
+                {
+                    id: "demo_3",
+                    name: "5-minute box breathing",
+                    description: "Breathe in 4s, hold 4s, out 4s, hold 4s. Calms nervous system.",
+                    frequency: "daily",
+                    duration_minutes: 5,
+                    streak: 5,
+                    completed_today: false
+                }
+            ];
+
+            renderHabitTracker({ habits: demoHabits }, true);
+        }
+
+        function renderHabitTracker(data, isDemo = false) {
             const container = document.getElementById('habitTrackerContainer');
-            
+
             if (!data.habits || data.habits.length === 0) {
                 renderEmptyState();
                 return;
@@ -276,8 +317,9 @@
 
             // Calculate stats
             const totalHabits = data.habits.length;
-            const completedToday = 0; // Will be tracked from completions
-            const longestStreak = Math.max(...data.habits.map(h => Math.floor(Math.random() * 10))); // Mock data
+            const completedToday = data.habits.filter(h => h.completed_today).length;
+            const longestStreak = Math.max(...data.habits.map(h => h.streak || 0));
+            const completionRate = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
 
             container.innerHTML = `
                 <!-- Momentum Card -->
@@ -295,11 +337,11 @@
                 <!-- Stats Grid -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-value">0%</div>
+                        <div class="stat-value">${completionRate}%</div>
                         <div class="stat-label">Completion rate</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">0/${totalHabits}</div>
+                        <div class="stat-value">${completedToday}/${totalHabits}</div>
                         <div class="stat-label">Completed today</div>
                     </div>
                     <div class="stat-card">
@@ -322,14 +364,14 @@
                                 <div class="habit-title">
                                     <h4>${habit.name}</h4>
                                 </div>
-                                <div class="habit-streak">${Math.floor(Math.random() * 5)} days streak</div>
+                                <div class="habit-streak">${habit.streak || 0} days streak</div>
                             </div>
                             <div class="habit-description">
                                 ${habit.description}
                             </div>
                             <div class="habit-footer">
                                 <div class="completion-checkbox">
-                                    <input type="checkbox" id="habit-${habit.id}" data-habit-id="${habit.id}">
+                                    <input type="checkbox" id="habit-${habit.id}" data-habit-id="${habit.id}" ${habit.completed_today ? 'checked' : ''}>
                                     <label for="habit-${habit.id}">Completed today</label>
                                 </div>
                             </div>

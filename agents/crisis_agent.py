@@ -114,6 +114,25 @@ Be direct, clear, and compassionate."""
         """
         print(f"🚨 {self.agent_name} assessing risk...")
 
+        # Check if already asked and waiting for confirmation
+        if state.agent_data.get("crisis_category_suggested"):
+            last_message = self.get_last_user_message(state)
+            if last_message:
+                confirm_words = ["yes", "sounds good", "that's right", "okay", "sure", "proceed", "continue", "absolutely"]
+                if any(word in last_message.lower() for word in confirm_words):
+                    state.agent_data["crisis_complete"] = True
+                    print("✅ Crisis assessment complete - moving to resource matching")
+                    response_text = "Great! Let me connect you with the right resources."
+                    state = self.add_message(state, "assistant", response_text)
+                else:
+                    # User wants different category - acknowledge and move forward
+                    state.agent_data["crisis_complete"] = True
+                    print("✅ User preference noted - moving to resource matching")
+                    response_text = "Understood. Let me find the best match for you."
+                    state = self.add_message(state, "assistant", response_text)
+            return state
+
+        # First time - do assessment
         # Build assessment context
         conversation = "\n".join([
             f"{msg.role}: {msg.content}"
@@ -140,14 +159,14 @@ RESPONSE: [2-3 sentences providing support and explaining the suggestion]"""
         state.agent_data["crisis_level"] = crisis_level
         state.agent_data["suggested_category"] = category
         state.agent_data["crisis_assessment"] = assessment_text
+        state.agent_data["crisis_category_suggested"] = True
 
-        # Add category choice prompt to response
+        # Add confirmation question
         if category and category != "general":
             response_text = (
                 f"{response_text}\n\n"
-                f"💡 **Suggested Counselor Type:** {category.title()} Specialist\n\n"
-                f"Does this sound right to you, or would you prefer a different type of counselor? "
-                f"(Available: Depression, Anxiety, Career, Marriage, ADHD, Trauma, Addiction, Grief, or General)"
+                f"Based on what you've shared, I think a **{category.title()} Specialist** would be most helpful for you. "
+                f"Does that sound right to you?"
             )
 
         # Add response
@@ -156,6 +175,7 @@ RESPONSE: [2-3 sentences providing support and explaining the suggestion]"""
         # Set flags for routing
         if crisis_level == CrisisLevel.IMMEDIATE:
             state.agent_data["needs_emergency"] = True
+            state.agent_data["crisis_complete"] = True
             print("🚨 IMMEDIATE crisis detected - emergency resources needed")
         elif crisis_level in [CrisisLevel.HIGH, CrisisLevel.MODERATE]:
             state.agent_data["needs_therapist"] = True
@@ -163,18 +183,6 @@ RESPONSE: [2-3 sentences providing support and explaining the suggestion]"""
         else:
             state.agent_data["needs_therapist"] = False
             print("✅ No immediate crisis detected")
-
-        state.agent_data["crisis_complete"] = True
-        
-        # Add proactive handoff message to Resource Agent
-        if crisis_level != CrisisLevel.IMMEDIATE:
-            handoff_message = (
-                "\n\n---\n\n"
-                f"💡 **Next Step**: Our Resource team will now match you with {category.title()} specialists. "
-                f"They'll review available counselors and find the best fit for your specific needs. "
-                f"This matching process is personalized to you."
-            )
-            state = self.add_message(state, "assistant", handoff_message)
 
         return state
 

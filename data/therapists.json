@@ -1,0 +1,185 @@
+{
+  "therapists": [
+    {
+      "id": "therapist_001",
+      "name": "Dr. Maya Patel",
+      "email": "maya.patel@mindbridge.org",
+      "specializations": ["anxiety", "depression"],
+      "years_experience": 12,
+      "bio": "Specializes in cognitive-behavioral therapy for anxiety and depression. Warm, empathetic approach.",
+      "availability": "evenings"
+    },
+    {
+      "id": "therapist_002",
+      "name": "James Chen",
+      "email": "james.chen@mindbridge.org",
+      "specializations": ["career", "adhd"],
+      "years_experience": 8,
+      "bio": "Career counselor and ADHD coach. Helps with work-life balance and executive function.",
+      "availability": "weekends"
+    },
+    {
+      "id": "therapist_003",
+      "name": "Dr. Sarah Johnson",
+      "email": "sarah.johnson@mindbridge.org",
+      "specializations": ["depression", "grief"],
+      "years_experience": 15,
+      "bio": "Compassionate therapist specializing in depression and bereavement counseling.",
+      "availability": "mornings"
+    },
+    {
+      "id": "therapist_004",
+      "name": "Marcus Williams",
+      "email": "marcus.williams@mindbridge.org",
+      "specializations": ["anxiety", "trauma"],
+      "years_experience": 10,
+      "bio": "PTSD specialist with experience in trauma-informed care and anxiety management.",
+      "availability": "afternoons"
+    },
+    {
+      "id": "therapist_005",
+      "name": "Dr. Elena Rodriguez",
+      "email": "elena.rodriguez@mindbridge.org",
+      "specializations": ["marriage", "general"],
+      "years_experience": 18,
+      "bio": "Couples therapist and relationship counselor. Focuses on communication and conflict resolution.",
+      "availability": "evenings"
+    },
+    {
+      "id": "therapist_006",
+      "name": "Kevin O'Brien",
+      "email": "kevin.obrien@mindbridge.org",
+      "specializations": ["addiction", "depression"],
+      "years_experience": 14,
+      "bio": "Addiction recovery specialist with dual focus on substance abuse and co-occurring depression.",
+      "availability": "mornings"
+    },
+    {
+      "id": "therapist_007",
+      "name": "Dr. Aisha Mohammed",
+      "email": "aisha.mohammed@mindbridge.org",
+      "specializations": ["trauma", "anxiety"],
+      "years_experience": 11,
+      "bio": "EMDR practitioner specializing in trauma processing and anxiety disorders.",
+      "availability": "weekends"
+    },
+    {
+      "id": "therapist_008",
+      "name": "Rachel Green",
+      "email": "rachel.green@mindbridge.org",
+      "specializations": ["career", "general"],
+      "years_experience": 6,
+      "bio": "Career transition specialist helping professionals find purpose and direction.",
+      "availability": "evenings"
+    },
+    {
+      "id": "therapist_009",
+      "name": "Dr. Michael Kim",
+      "email": "michael.kim@mindbridge.org",
+      "specializations": ["adhd", "anxiety"],
+      "years_experience": 9,
+      "bio": "Neurodevelopmental specialist focusing on ADHD management and anxiety reduction.",
+      "availability": "afternoons"
+    },
+    {
+      "id": "therapist_010",
+      "name": "Nina Alvarez",
+      "email": "nina.alvarez@mindbridge.org",
+      "specializations": ["grief", "depression"],
+      "years_experience": 13,
+      "bio": "Bereavement counselor with gentle approach to loss, grief, and life transitions.",
+      "availability": "mornings"
+    },
+    {
+      "id": "therapist_011",
+      "name": "Dr. David Thompson",
+      "email": "david.thompson@mindbridge.org",
+      "specializations": ["marriage", "anxiety"],
+      "years_experience": 16,
+      "bio": "Family systems therapist specializing in couples counseling and relationship anxiety.",
+      "availability": "evenings"
+    },
+    {
+      "id": "therapist_012",
+      "name": "Priya Sharma",
+      "email": "priya.sharma@mindbridge.org",
+      "specializations": ["anxiety", "general"],
+      "years_experience": 7,
+      "bio": "Mindfulness-based therapist helping clients manage anxiety and build resilience.",
+      "availability": "weekends"
+    },
+    {
+      "id": "therapist_013",
+      "name": "Dr. Robert Lee",
+      "email": "robert.lee@mindbridge.org",
+      "specializations": ["addiction", "trauma"],
+      "years_experience": 20,
+      "bio": "Veteran therapist with extensive experience in addiction recovery and trauma healing.",
+      "availability": "mornings"
+    },
+    {
+      "id": "therapist_014",
+      "name": "Lisa Martinez",
+      "email": "lisa.martinez@mindbridge.org",
+      "specializations": ["career", "depression"],
+      "years_experience": 10,
+      "bio": "Work-related stress specialist helping professionals combat burnout and depression.",
+      "availability": "afternoons"
+    },
+    {
+      "id": "therapist_015",
+      "name": "Dr. Ahmed Hassan",
+      "email": "ahmed.hassan@mindbridge.org",
+      "specializations": ["adhd", "general"],
+      "years_experience": 8,
+      "bio": "ADHD coach and general counselor focusing on productivity and life management.",
+      "availability": "evenings"
+    },
+    {
+      "id": "therapist_016",
+      "name": "Emily Foster",
+      "email": "emily.foster@mindbridge.org",
+      "specializations": ["depression", "anxiety"],
+      "years_experience": 11,
+      "bio": "Clinical psychologist specializing in mood disorders and anxiety management.",
+      "availability": "weekends"
+    },
+    {
+      "id": "therapist_017",
+      "name": "Dr. Carlos Mendez",
+      "email": "carlos.mendez@mindbridge.org",
+      "specializations": ["grief", "trauma"],
+      "years_experience": 14,
+      "bio": "Trauma-informed grief counselor helping clients navigate profound loss.",
+      "availability": "mornings"
+    },
+    {
+      "id": "therapist_018",
+      "name": "Jennifer Park",
+      "email": "jennifer.park@mindbridge.org",
+      "specializations": ["marriage", "career"],
+      "years_experience": 9,
+      "bio": "Helps couples balance relationship needs with career ambitions and life goals.",
+      "availability": "afternoons"
+    },
+    {
+      "id": "therapist_019",
+      "name": "Dr. Samuel Brown",
+      "email": "samuel.brown@mindbridge.org",
+      "specializations": ["addiction", "anxiety"],
+      "years_experience": 17,
+      "bio": "Substance abuse counselor specializing in anxiety-driven addictive behaviors.",
+      "availability": "evenings"
+    },
+    {
+      "id": "therapist_020",
+      "name": "Olivia Taylor",
+      "email": "olivia.taylor@mindbridge.org",
+      "specializations": ["general", "depression"],
+      "years_experience": 5,
+      "bio": "Holistic counselor offering support for general wellness and mild to moderate depression.",
+      "availability": "weekends"
+    }
+  ]
+}
+

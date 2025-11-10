@@ -12,6 +12,7 @@ Powered by: Gemini 2.0 Flash (fast recommendations)
 """
 
 from typing import List
+import os
 from .base_agent import BaseAgent, AgentState
 from models.habit import Habit, HabitFrequency
 
@@ -376,14 +377,23 @@ Keep recommendations warm and encouraging (2-3 sentences)."""
 
     def _format_habit_response(self, category: str, habits: List[Habit]) -> str:
         """
-        Create a warm, human-friendly response about the recommended habits.
+        Redirect user to habit tracker dashboard and mention therapist will update habits.
         """
-        response = f"While you wait to connect with your {category} counselor, here are some evidence-based habits that can help:\n\n"
+        response = (
+            f"Perfect! I've set up a personalized habit tracker for you with {len(habits)} evidence-based habits "
+            f"to support your work with your {category} specialist.\n\n"
 
-        for i, habit in enumerate(habits, 1):
-            response += f"**{i}. {habit.name}** ({habit.duration_minutes} min, {habit.frequency.value})\n"
-            response += f"   {habit.description}\n\n"
+            "**Your starter habits (your therapist will refine these):**\n\n"
 
-        response += "These are small steps you can start today. Your counselor can help you build on these once you connect!"
+            f"• {habits[0].name} ({habits[0].duration_minutes} min daily)\n"
+            f"• {habits[1].name} ({habits[1].duration_minutes} min {habits[1].frequency.value})\n"
+            f"• {habits[2].name} ({habits[2].duration_minutes} min {habits[2].frequency.value})\n\n"
+
+            "Your therapist will review and customize these habits during your first session based on your specific needs. "
+            "In the meantime, you can track your progress in the **Habit Tracker** tab.\n\n"
+
+            "**Keep the momentum!** Your specialist will love seeing how consistent you've been. "
+            "These small steps will make a big difference while you wait for your first session."
+        )
 
         return response

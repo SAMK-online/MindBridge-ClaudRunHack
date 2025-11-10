@@ -14,8 +14,10 @@ Powered by: Gemini 2.0 Flash thinking mode (complex decision-making)
 from typing import Optional
 from .base_agent import BaseAgent, AgentState
 from .intake_agent import IntakeAgent
+from .privacy_agent import PrivacyAgent
 from .crisis_agent import CrisisAgent
 from .resource_agent import ResourceAgent
+from .scheduling_agent import SchedulingAgent
 from .habit_agent import HabitAgent
 
 
@@ -25,9 +27,11 @@ class CoordinatorAgent(BaseAgent):
 
     Workflow:
     1. Intake Agent - Warm onboarding
-    2. Crisis Agent - Risk assessment
-    3. Resource Agent - Therapist matching (if needed)
-    4. Habit Agent - Habit recommendations
+    2. Privacy Agent - Privacy tier selection
+    3. Crisis Agent - Risk assessment
+    4. Resource Agent - Therapist matching (if needed)
+    5. Scheduling Agent - Support group signup
+    6. Habit Agent - Habit tracker setup & recommendations
     """
 
     def __init__(self):
@@ -40,19 +44,23 @@ class CoordinatorAgent(BaseAgent):
 
         # Initialize all agents
         self.intake_agent = IntakeAgent()
+        self.privacy_agent = PrivacyAgent()
         self.crisis_agent = CrisisAgent()
         self.resource_agent = ResourceAgent()
+        self.scheduling_agent = SchedulingAgent()
         self.habit_agent = HabitAgent()
 
     def get_system_prompt(self) -> str:
         """System prompt for coordination"""
-        return """You are the Coordinator AI managing NimaCare's multi-agent system.
+        return """You are the Coordinator AI managing MindBridge's multi-agent system.
 
 Your job: Route users through the appropriate workflow:
 1. Intake → gather context
-2. Crisis → assess risk
-3. Resource → match therapist (if needed)
-4. Habit → recommend habits
+2. Privacy → set privacy preferences
+3. Crisis → assess risk
+4. Resource → match therapist (if needed)
+5. Support Group → connect with peer support
+6. Habit → setup habit tracker
 
 Make intelligent routing decisions based on conversation state."""
 
@@ -74,6 +82,10 @@ Make intelligent routing decisions based on conversation state."""
             state.current_agent = "intake"
             state = await self.intake_agent.process(state)
 
+        elif next_agent == "privacy":
+            state.current_agent = "privacy"
+            state = await self.privacy_agent.process(state)
+
         elif next_agent == "crisis":
             state.current_agent = "crisis"
             state = await self.crisis_agent.process(state)
@@ -81,6 +93,10 @@ Make intelligent routing decisions based on conversation state."""
         elif next_agent == "resource":
             state.current_agent = "resource"
             state = await self.resource_agent.process(state)
+
+        elif next_agent == "scheduling":
+            state.current_agent = "scheduling"
+            state = await self.scheduling_agent.process(state)
 
         elif next_agent == "habit":
             state.current_agent = "habit"
@@ -98,17 +114,31 @@ Make intelligent routing decisions based on conversation state."""
         """
         Determine which agent should process next based on state.
 
-        Flow: Intake → Crisis (with category suggestion) → Resource (filtered) → Habit → Complete
+        Flow: Intake → Privacy → Crisis → Resource → Scheduling (Support Groups) → Habit → Complete
         """
         # Check workflow flags
         intake_complete = state.agent_data.get("intake_complete", False)
+        privacy_complete = state.agent_data.get("privacy_complete", False)
         crisis_complete = state.agent_data.get("crisis_complete", False)
         resource_complete = state.agent_data.get("resource_complete", False)
+        scheduling_complete = state.agent_data.get("scheduling_complete", False)
         habit_complete = state.agent_data.get("habit_complete", False)
 
-        # Sequential workflow: Intake → Crisis → Resource → Habit → Complete
+        # Debug: Show completion status
+        print(f"📊 Workflow Status:")
+        print(f"   - Intake: {'✅ Complete' if intake_complete else '❌ Incomplete'}")
+        print(f"   - Privacy: {'✅ Complete' if privacy_complete else '❌ Incomplete'}")
+        print(f"   - Crisis: {'✅ Complete' if crisis_complete else '❌ Incomplete'}")
+        print(f"   - Resource: {'✅ Complete' if resource_complete else '❌ Incomplete'}")
+        print(f"   - Scheduling (Support Groups): {'✅ Complete' if scheduling_complete else '❌ Incomplete'}")
+        print(f"   - Habit: {'✅ Complete' if habit_complete else '❌ Incomplete'}")
+
+        # Sequential workflow: Intake → Privacy → Crisis → Resource → Scheduling → Habit → Complete
         if not intake_complete:
             return "intake"
+
+        if not privacy_complete:
+            return "privacy"
 
         if not crisis_complete:
             return "crisis"
@@ -118,12 +148,16 @@ Make intelligent routing decisions based on conversation state."""
         if not resource_complete:
             return "resource"
 
-        # After counselor matching, provide habit recommendations
-        # (Habit agent recommends habits based on selected category)
+        # After selecting counselor, show support group signup
+        if not scheduling_complete:
+            return "scheduling"
+
+        # After support group signup, setup habit tracker
+        # (Habit agent creates personalized habits and redirects to tracker)
         if not habit_complete:
             return "habit"
 
-        # All done - user has counselors and habits
+        # All done - user has counselor, support group, and habit tracker
         return "complete"
 
     def _generate_completion_message(self, state: AgentState) -> str:

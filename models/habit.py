@@ -157,6 +157,56 @@ class Habit(BaseModel):
         """How many days has this habit been tracked."""
         return (date_type.today() - self.start_date).days
 
+    @property
+    def longest_streak(self) -> int:
+        """Calculate the longest consecutive completion streak ever."""
+        if not self.completions:
+            return 0
+
+        # Sort by date (oldest first)
+        sorted_completions = sorted(
+            self.completions,
+            key=lambda x: x.date
+        )
+
+        max_streak = 0
+        current_streak = 0
+
+        for completion in sorted_completions:
+            if completion.completed:
+                current_streak += 1
+                max_streak = max(max_streak, current_streak)
+            else:
+                current_streak = 0
+
+        return max_streak
+
+    @property
+    def total_completions(self) -> int:
+        """Total number of days completed."""
+        return sum(1 for c in self.completions if c.completed)
+
+    @property
+    def streak_milestone_reached(self) -> Optional[int]:
+        """Check if user reached a streak milestone (7, 14, 30, 60, 90 days)."""
+        milestones = [7, 14, 30, 60, 90, 180, 365]
+        current = self.current_streak
+
+        for milestone in milestones:
+            if current == milestone:
+                return milestone
+
+        return None
+
+    @property
+    def progress_percentage(self) -> float:
+        """Progress towards target_days goal."""
+        if self.target_days <= 0:
+            return 0.0
+
+        completed = self.total_completions
+        return min((completed / self.target_days) * 100, 100.0)
+
     class Config:
         json_schema_extra = {
             "example": {
