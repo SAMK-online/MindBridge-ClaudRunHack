@@ -33,7 +33,7 @@ class CoordinatorAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Coordinator",
-            model_name="gemini-2.0-flash-thinking-exp-1219",  # Thinking mode for orchestration logic
+            model_name="gemini-2.5-pro",  # Pro model for orchestration logic
             temperature=0.3,  # Low temp for consistent routing
             max_tokens=200
         )

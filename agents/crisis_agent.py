@@ -37,7 +37,7 @@ class CrisisAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Crisis Specialist",
-            model_name="gemini-2.0-flash-exp",
+            model_name="gemini-2.5-flash",
             temperature=0.3,  # Low temp for consistent risk assessment
             max_tokens=400
         )

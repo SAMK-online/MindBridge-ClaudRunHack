@@ -26,7 +26,7 @@ class HabitAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Habit Coach",
-            model_name="gemini-2.0-flash-exp",
+            model_name="gemini-2.5-flash",
             temperature=0.7,
             max_tokens=400
         )

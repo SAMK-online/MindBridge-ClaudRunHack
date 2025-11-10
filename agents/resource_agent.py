@@ -26,7 +26,7 @@ class ResourceAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Resource Coordinator",
-            model_name="gemini-2.0-flash-thinking-exp-1219",  # Thinking mode for complex reasoning
+            model_name="gemini-2.5-pro",  # Pro model for complex reasoning
             temperature=0.5,
             max_tokens=600
         )

@@ -40,7 +40,7 @@ class IntakeAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Nima (Intake)",
-            model_name="gemini-2.0-flash-thinking-exp-1219",  # Thinking mode for enhanced empathy
+            model_name="gemini-2.5-pro",  # Pro model for enhanced empathy
             temperature=0.85,  # Warm and empathetic
             max_tokens=250
         )
