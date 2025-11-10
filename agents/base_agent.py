@@ -41,7 +41,11 @@ class BaseAgent:
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-        # Configure Gemini
+        # Configure Gemini with API key only (no service account)
+        # Explicitly remove service account credentials to avoid SSL issues
+        if "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
+            del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+
         api_key = os.getenv("GOOGLE_API_KEY")
         if api_key:
             genai.configure(api_key=api_key)
