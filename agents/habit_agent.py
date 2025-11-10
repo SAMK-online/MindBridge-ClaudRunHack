@@ -8,7 +8,7 @@ This agent:
 3. Adapts difficulty based on success rate
 4. Provides encouragement and streak tracking
 
-Powered by: Gemini 1.5 Flash (fast recommendations)
+Powered by: Gemini 2.0 Flash (fast recommendations)
 """
 
 from typing import List
@@ -26,7 +26,7 @@ class HabitAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Habit Coach",
-            model_name="gemini-1.5-flash",
+            model_name="gemini-2.0-flash-exp",
             temperature=0.7,
             max_tokens=400
         )

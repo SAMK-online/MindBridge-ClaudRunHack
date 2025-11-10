@@ -20,7 +20,7 @@ class IntakeAgent(BaseAgent):
     """
     Intake Agent for warm, conversational onboarding.
 
-    Powered by: Gemini 1.5 Flash
+    Powered by: Gemini 2.0 Flash
     Purpose: Create safe space for users to share at their own pace
     """
 
@@ -39,7 +39,7 @@ class IntakeAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Nima (Intake)",
-            model_name="gemini-1.5-flash",
+            model_name="gemini-2.0-flash-exp",
             temperature=0.85,  # Warm and empathetic
             max_tokens=250
         )

@@ -8,7 +8,7 @@ This agent:
 3. Can autonomously search web for new volunteer therapists (via tools)
 4. Recruits and onboards new therapists when needed
 
-Powered by: Gemini 1.5 Pro (complex reasoning for matching logic)
+Powered by: Gemini 2.0 Flash thinking mode (complex reasoning for matching logic)
 """
 
 from typing import List, Optional
@@ -20,13 +20,13 @@ class ResourceAgent(BaseAgent):
     """
     Resource Agent for intelligent therapist matching.
 
-    Uses Gemini 1.5 Pro for complex matching logic.
+    Uses Gemini 2.0 Flash thinking mode for complex matching logic.
     """
 
     def __init__(self):
         super().__init__(
             agent_name="Resource Coordinator",
-            model_name="gemini-1.5-pro",  # Pro for complex reasoning
+            model_name="gemini-2.0-flash-thinking-exp-1219",  # Thinking mode for complex reasoning
             temperature=0.5,
             max_tokens=600
         )

@@ -32,7 +32,7 @@ class BaseAgent:
     def __init__(
         self,
         agent_name: str,
-        model_name: str = "gemini-1.5-flash",
+        model_name: str = "gemini-2.0-flash-exp",
         temperature: float = 0.7,
         max_tokens: int = 500
     ):

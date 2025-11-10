@@ -7,7 +7,7 @@ This agent uses Reason + Act (ReAct) pattern to:
 2. Assess crisis level (NONE → IMMEDIATE)
 3. Provide appropriate resources and escalation
 
-Powered by: Gemini 1.5 Flash (fast, accurate crisis detection)
+Powered by: Gemini 2.0 Flash (fast, accurate crisis detection)
 """
 
 from typing import Dict, Any
@@ -37,7 +37,7 @@ class CrisisAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Crisis Specialist",
-            model_name="gemini-1.5-flash",
+            model_name="gemini-2.0-flash-exp",
             temperature=0.3,  # Low temp for consistent risk assessment
             max_tokens=400
         )

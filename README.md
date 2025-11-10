@@ -27,34 +27,34 @@ NimaCare demonstrates **true autonomous multi-agent AI**:
 ## 🏗️ Multi-Agent Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│   Coordinator Agent (Gemini 1.5 Pro)        │
-└────────────┬────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│ Coordinator Agent (Gemini 2.0 Flash Thinking)  │
+└────────────┬────────────────────────────────────┘
              │
     ┌────────┼────────┬───────────┬──────────┐
     ▼        ▼        ▼           ▼          ▼
-┌────────┐┌────────┐┌────────┐┌────────┐
-│Intake  ││Crisis  ││Resource││Habit   │
-│Agent   ││Agent   ││Agent   ││Agent   │
-│(Flash) ││(Flash) ││(Pro)   ││(Flash) │
-└────────┘└────────┘└────────┘└────────┘
+┌────────┐┌────────┐┌──────────┐┌────────┐
+│Intake  ││Crisis  ││Resource  ││Habit   │
+│Agent   ││Agent   ││Agent     ││Agent   │
+│(2.0)   ││(2.0)   ││(Thinking)││(2.0)   │
+└────────┘└────────┘└──────────┘└────────┘
 ```
 
 ### Agent Responsibilities
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
-| **Coordinator** | Gemini 1.5 Pro | Orchestrates workflow and agent coordination |
-| **Intake Agent** | Gemini 1.5 Flash | Conducts empathetic, stage-aware conversations |
-| **Crisis Agent** | Gemini 1.5 Flash | ReAct-based risk assessment (5 levels: NONE → IMMEDIATE) |
-| **Resource Agent** | Gemini 1.5 Pro | Autonomous therapist search and intelligent matching |
-| **Habit Agent** | Gemini 1.5 Flash | Adaptive habit recommendations and tracking |
+| **Coordinator** | Gemini 2.0 Flash (Thinking) | Orchestrates workflow and agent coordination |
+| **Intake Agent** | Gemini 2.0 Flash | Conducts empathetic, stage-aware conversations |
+| **Crisis Agent** | Gemini 2.0 Flash | ReAct-based risk assessment (5 levels: NONE → IMMEDIATE) |
+| **Resource Agent** | Gemini 2.0 Flash (Thinking) | Autonomous therapist search and intelligent matching |
+| **Habit Agent** | Gemini 2.0 Flash | Adaptive habit recommendations and tracking |
 
 ## 🚀 Tech Stack
 
 ### AI & Models
-- **Google Gemini 1.5 Pro** - Complex reasoning for coordination and matching
-- **Google Gemini 1.5 Flash** - Fast, efficient responses for intake, crisis, and habits
+- **Google Gemini 2.0 Flash (Thinking Mode)** - Complex reasoning for coordination and matching
+- **Google Gemini 2.0 Flash** - Fast, efficient responses for intake, crisis, and habits
 - **Multi-Agent Pattern** - Coordinated autonomous agents
 
 ### Backend

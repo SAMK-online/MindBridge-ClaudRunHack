@@ -8,7 +8,7 @@ This agent orchestrates the workflow between all agents:
 3. Maintains conversation flow
 4. Ensures smooth handoffs
 
-Powered by: Gemini 1.5 Pro (complex decision-making)
+Powered by: Gemini 2.0 Flash thinking mode (complex decision-making)
 """
 
 from typing import Optional
@@ -33,7 +33,7 @@ class CoordinatorAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Coordinator",
-            model_name="gemini-1.5-pro",  # Pro for orchestration logic
+            model_name="gemini-2.0-flash-thinking-exp-1219",  # Thinking mode for orchestration logic
             temperature=0.3,  # Low temp for consistent routing
             max_tokens=200
         )
