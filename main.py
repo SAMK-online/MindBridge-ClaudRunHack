@@ -6,8 +6,11 @@ FastAPI backend for multi-agent system.
 Deploys to Google Cloud Run.
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import List, Optional
 import os
@@ -35,6 +38,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize templates
+templates = Jinja2Templates(directory="templates")
+
+# Mount static files (if any)
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+
 # Initialize coordinator
 coordinator = CoordinatorAgent()
 
@@ -58,9 +67,14 @@ class ChatResponse(BaseModel):
     workflow_complete: bool = False
 
 
-@app.get("/")
-async def root():
-    """Health check endpoint"""
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    """Serve the frontend UI"""
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/api")
+async def api_info():
+    """API information endpoint"""
     return {
         "service": "NimaCare API",
         "status": "healthy",
