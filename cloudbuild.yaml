@@ -1,12 +1,20 @@
-# Cloud Build configuration for Cloud Run deployment
+# Cloud Build configuration for MindBridge deployment
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/nimacareai/mindbridge:$COMMIT_SHA', '.']
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA']
+    args: ['push', 'gcr.io/nimacareai/mindbridge:$COMMIT_SHA']
+
+  # Tag as latest
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['tag', 'gcr.io/nimacareai/mindbridge:$COMMIT_SHA', 'gcr.io/nimacareai/mindbridge:latest']
+
+  # Push latest tag
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/nimacareai/mindbridge:latest']
 
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -14,22 +22,26 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'nimacare-api'
+      - 'mindbridge'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA'
+      - 'gcr.io/nimacareai/mindbridge:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
+      - '--memory=2Gi'
+      - '--cpu=2'
+      - '--timeout=300'
+      - '--max-instances=10'
+      - '--min-instances=0'
       - '--set-env-vars'
-      - 'GOOGLE_API_KEY=${_GOOGLE_API_KEY}'
+      - 'GOOGLE_API_KEY=AIzaSyC9jaU5hmQIbSwgAAG75AGONV5XU9WyIOg,GOOGLE_CLOUD_PROJECT=nimacareai'
 
 images:
-  - 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA'
-
-substitutions:
-  _GOOGLE_API_KEY: '' # Set via gcloud builds submit --substitutions
+  - 'gcr.io/nimacareai/mindbridge:$COMMIT_SHA'
+  - 'gcr.io/nimacareai/mindbridge:latest'
 
 options:
+  machineType: 'E2_HIGHCPU_8'
   logging: CLOUD_LOGGING_ONLY

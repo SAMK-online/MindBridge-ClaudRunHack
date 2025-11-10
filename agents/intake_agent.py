@@ -40,26 +40,32 @@ class IntakeAgent(BaseAgent):
     def __init__(self):
         super().__init__(
             agent_name="Nima (Intake)",
-            model_name="gemini-2.5-pro",  # Pro model for enhanced empathy
+            model_name="gemini-2.5-flash",  # Flash model works better for this use case
             temperature=0.85,  # Warm and empathetic
-            max_tokens=250
+            max_tokens=400  # Increased for deeper conversations
         )
 
     def get_system_prompt(self) -> str:
         """System prompt for friendly, calming conversation."""
-        return """You are Nima, a warm and empathetic mental health support AI from NimaCare.
+        return """You are Nima, a warm and empathetic wellness support assistant from MindBridge.
 
-Your role: Have a natural conversation to understand what's troubling the user.
+Your role: Have a deep, meaningful conversation to truly understand what the user is experiencing.
 
-Rules:
-- Keep responses to 2 sentences maximum
-- Be warm, caring, and human-like
-- Ask thoughtful questions to understand their situation
-- NEVER repeat yourself - each response must be different
-- Show empathy and validate their feelings
-- After 3-4 exchanges, naturally offer to connect them with a volunteer therapist
+Therapeutic Approach:
+- Reflect back what you hear to show you're listening carefully
+- Validate their feelings and normalize their experiences
+- Ask thoughtful follow-up questions that go deeper
+- Create a safe space where they feel truly heard
+- Use 3-4 sentences to fully express empathy and understanding
+- Reference specific things they've shared to show you remember
 
-Remember: You're here to listen and understand, not to diagnose or give advice."""
+Example good responses:
+- "It sounds like you're carrying a lot of weight right now with work pressures. When you say you feel burned out, what does that look like in your day-to-day? Are you finding it hard to feel motivated, or is it more about feeling exhausted?"
+- "I hear that career uncertainty is weighing on you. It's completely understandable to feel lost when you're questioning your path. What aspects of your career feel most unsettling right now?"
+
+After 3-4 meaningful exchanges, naturally offer to connect them with a professional counselor who specializes in their area of concern.
+
+Remember: Go deep, not surface level. Each response should build on what they've shared."""
 
     async def process(self, state: AgentState) -> AgentState:
         """
@@ -69,6 +75,9 @@ Remember: You're here to listen and understand, not to diagnose or give advice."
 
         # Get current stage
         current_stage = state.agent_data.get("intake_stage", self.STAGE_GREETING)
+
+        # Track failed generations to auto-progress
+        failed_count = state.agent_data.get("intake_failed_count", 0)
 
         # Check for crisis keywords
         last_message = self.get_last_user_message(state)
@@ -86,23 +95,49 @@ Remember: You're here to listen and understand, not to diagnose or give advice."
 
         # Determine conversation progress
         turn_count = len([m for m in state.messages if m.role == "user"])
+        
+        # Check if user has agreed to counselor matching
+        last_message = self.get_last_user_message(state) or ""
+        user_agreed = any(word in last_message.lower() for word in ["yes", "absolutely", "sure", "ok", "okay", "please", "that would be helpful"])
 
-        # Build context based on stage
-        if turn_count >= 5:
-            context = "The user has shared enough. Warmly offer to connect them with a volunteer therapist."
+        # Build context based on stage - encourage deeper conversations
+        if turn_count >= 6 or (turn_count >= 5 and user_agreed):
+            context = "The user has agreed to counselor matching. Confirm you'll connect them with a professional counselor. Be brief and transition to the next step."
             next_stage = self.STAGE_READY
+        elif turn_count >= 4:
+            context = "Go deeper into their experience. Ask about how this is affecting their daily life, relationships, or well-being. Show that you're really listening by referencing specific details they've shared."
+            next_stage = self.STAGE_EXPLORE
         elif turn_count >= 3:
-            context = "Continue exploring their concerns with empathy."
+            context = "Continue exploring their concerns with empathy. Ask follow-up questions that show genuine curiosity about their situation. Help them feel heard and understood."
             next_stage = self.STAGE_EXPLORE
         elif turn_count >= 2:
-            context = "Ask what brought them here today."
+            context = "They've shared something about what brings them here. Reflect back what you heard and ask them to tell you more. Show empathy and validate their feelings."
             next_stage = self.STAGE_EXPLORE
         else:
-            context = "Greet them warmly and ask how they're feeling."
+            context = "This is your first message. Greet them warmly as Nima. Let them know you're here to listen. Ask how they're feeling and what brings them here today."
             next_stage = self.STAGE_CHECK_IN
 
         # Generate response
         response_text = self.generate_response(state, context)
+
+        # Check if this was a fallback response (indicates AI filter block)
+        is_fallback = response_text.startswith("Thank you for sharing") or \
+                      response_text.startswith("I appreciate you") or \
+                      response_text.startswith("That sounds really") or \
+                      response_text.startswith("I hear you") or \
+                      response_text.startswith("It takes courage")
+
+        if is_fallback:
+            failed_count += 1
+            state.agent_data["intake_failed_count"] = failed_count
+            print(f"⚠️  AI filter blocked response ({failed_count}/3)")
+
+            # Auto-complete intake after 3 failed attempts
+            if failed_count >= 3:
+                print("⏭️  Auto-completing intake due to AI filters")
+                response_text = "It takes courage to reach out. I'd like to connect you with a professional counselor who can provide the support you need. Let me find someone who's a good match for you."
+                state.agent_data["intake_complete"] = True
+                next_stage = self.STAGE_READY
 
         # Add response to state
         state = self.add_message(state, "assistant", response_text)
@@ -114,6 +149,15 @@ Remember: You're here to listen and understand, not to diagnose or give advice."
         if next_stage == self.STAGE_READY:
             state.agent_data["intake_complete"] = True
             print("✅ Intake complete - ready for crisis assessment")
+            
+            # Add proactive handoff message
+            handoff_message = (
+                "\n\n---\n\n"
+                "💡 **Next Step**: I'm now connecting you with our Crisis Assessment team. "
+                "They'll evaluate your situation to ensure you're safe and determine the best type of support for you. "
+                "This is a standard part of our care process."
+            )
+            state = self.add_message(state, "assistant", handoff_message)
 
         return state
 

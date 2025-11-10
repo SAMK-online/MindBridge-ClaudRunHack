@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | MindBridge</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Background gradients */
+        .bg-gradient {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.8), transparent);
+            top: 10%;
+            left: 10%;
+        }
+
+        .bg-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(52, 168, 83, 0.6), transparent);
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+
+        .bg-3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(251, 188, 5, 0.5), transparent);
+            top: 50%;
+            right: 20%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+        }
+
+        .error-code {
+            font-size: clamp(6rem, 15vw, 12rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 75%, #ea4335 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(66, 133, 244, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(66, 133, 244, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(66, 133, 244, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Helpful links */
+        .helpful-links {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .helpful-links h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            color: rgba(66, 133, 244, 0.9);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .links a:hover {
+            color: rgba(66, 133, 244, 1);
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .links {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient bg-1"></div>
+    <div class="bg-gradient bg-2"></div>
+    <div class="bg-gradient bg-3"></div>
+
+    <div class="content">
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+            Oops! The page you're looking for seems to have wandered off. 
+            Don't worry, we're here to help you find your way back.
+        </p>
+
+        <div class="actions">
+            <a href="/" class="btn btn-primary">
+                🏠 Go Home
+            </a>
+            <a href="/app" class="btn btn-secondary">
+                🎤 Try Voice App
+            </a>
+        </div>
+
+        <div class="helpful-links">
+            <h3>Quick Links</h3>
+            <div class="links">
+                <a href="/">Landing Page</a>
+                <a href="/app">Voice Interface</a>
+                <a href="/chat-ui">Text Chat</a>
+                <a href="https://github.com/SAMK-online/MindBridge-ClaudRunHack">GitHub</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add keyboard shortcut (Escape to go home)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>
+

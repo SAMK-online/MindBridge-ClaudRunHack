@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 MindBridge - Voice AI Support</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background effects - Google Colors */
+        .bg-gradient {
+            position: fixed;
+            top: -50%;
+            left: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.4) 0%, transparent 70%); /* Google Blue */
+            animation: float 20s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        .bg-gradient-2 {
+            position: fixed;
+            bottom: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(52, 168, 83, 0.3) 0%, transparent 70%); /* Google Green */
+            animation: float 25s infinite ease-in-out reverse;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .live-badge {
+            padding: 0.25rem 0.75rem;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(66, 133, 244, 0.5);
+        }
+
+        .tab-btn.active {
+            background: rgba(66, 133, 244, 0.3);
+            border-color: rgba(66, 133, 244, 0.6);
+            color: #ffffff;
+        }
+
+        /* Voice interface */
+        .voice-interface {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        /* Voice orb */
+        .voice-orb-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 2rem 0;
+        }
+
+        .voice-orb {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.6), rgba(52, 168, 83, 0.4));
+            box-shadow: 0 0 80px rgba(66, 133, 244, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voice-orb::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 60%);
+            border-radius: 50%;
+        }
+
+        .voice-orb.listening {
+            animation: pulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 120px rgba(66, 133, 244, 0.8), 0 0 200px rgba(52, 168, 83, 0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .voice-orb.speaking {
+            animation: speak 0.3s ease-in-out infinite alternate;
+        }
+
+        @keyframes speak {
+            0% { transform: scale(1); box-shadow: 0 0 80px rgba(66, 133, 244, 0.5); }
+            100% { transform: scale(1.08); box-shadow: 0 0 140px rgba(66, 133, 244, 0.9); }
+        }
+
+        .orb-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Control buttons */
+        .voice-controls {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(66, 133, 244, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Analytics & Agent status panel */
+        .agent-status-panel {
+            position: fixed;
+            top: 50%;
+            left: 2rem;
+            transform: translateY(-50%);
+            background: rgba(16, 19, 46, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            min-width: 300px;
+            max-width: 340px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .analytics-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .analytics-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            margin-bottom: 1rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .metric-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(66, 133, 244, 1);
+        }
+
+        .agent-timeline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .timeline-node {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-node.completed {
+            background: rgba(52, 168, 83, 0.3);
+            border-color: rgba(52, 168, 83, 0.8);
+            color: rgba(52, 168, 83, 1);
+        }
+
+        .timeline-node.active {
+            background: rgba(66, 133, 244, 0.3);
+            border-color: rgba(66, 133, 244, 0.8);
+            color: rgba(66, 133, 244, 1);
+            animation: pulse-node 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-node {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(66, 133, 244, 0); }
+        }
+
+        .timeline-connector {
+            flex: 1;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-connector.completed {
+            background: rgba(52, 168, 83, 0.5);
+        }
+
+        .risk-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .risk-none {
+            background: rgba(52, 168, 83, 0.2);
+            border: 1px solid rgba(52, 168, 83, 0.4);
+            color: rgba(52, 168, 83, 1);
+        }
+
+        .risk-moderate {
+            background: rgba(251, 188, 5, 0.2);
+            border: 1px solid rgba(251, 188, 5, 0.4);
+            color: rgba(251, 188, 5, 1);
+        }
+
+        .risk-high {
+            background: rgba(234, 67, 53, 0.2);
+            border: 1px solid rgba(234, 67, 53, 0.4);
+            color: rgba(234, 67, 53, 1);
+        }
+
+        .contribution-item {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .contribution-item.intake {
+            border-left-color: rgba(66, 133, 244, 0.8);
+        }
+
+        .contribution-item.crisis {
+            border-left-color: rgba(251, 188, 5, 0.8);
+        }
+
+        .contribution-item.resource {
+            border-left-color: rgba(52, 168, 83, 0.8);
+        }
+
+        .contribution-item.habit {
+            border-left-color: rgba(234, 67, 53, 0.8);
+        }
+
+        .contribution-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .contribution-badge {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .contribution-content {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .agent-status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            flex-shrink: 0;
+        }
+
+        .agent-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .agent-info p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        /* Action buttons */
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            background: rgba(66, 133, 244, 0.2);
+            border: 1px solid rgba(66, 133, 244, 0.4);
+            border-radius: 999px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .action-button:hover {
+            background: rgba(66, 133, 244, 0.3);
+            border-color: rgba(66, 133, 244, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Chat messages */
+        .messages-container {
+            max-width: 700px;
+            width: 100%;
+            margin-top: 2rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .message {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.nima {
+            border-left: 3px solid rgba(66, 133, 244, 0.8);
+        }
+
+        .message.user {
+            border-left: 3px solid rgba(52, 168, 83, 0.8);
+        }
+
+        .message-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .message-content {
+            line-height: 1.6;
+        }
+
+        /* Hidden sections */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Privacy Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .privacy-modal {
+            background: linear-gradient(180deg, rgba(16, 19, 46, 0.95), rgba(16, 19, 46, 0.85));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .privacy-modal h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .privacy-modal .subtitle {
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .privacy-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .privacy-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .privacy-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(66, 133, 244, 0.4);
+            transform: translateX(4px);
+        }
+
+        .privacy-option.selected {
+            background: rgba(66, 133, 244, 0.25);
+            border-color: rgba(66, 133, 244, 0.8);
+            box-shadow: 0 0 20px rgba(66, 133, 244, 0.4);
+            transform: scale(1.02);
+        }
+        
+        .privacy-option.selected::before {
+            content: '✓';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 24px;
+            height: 24px;
+            background: rgba(66, 133, 244, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .privacy-option h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .privacy-option p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 2rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(66, 133, 244, 0.4);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: rgba(66, 133, 244, 1);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .thinking-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(66, 133, 244, 0.1);
+            border: 1px solid rgba(66, 133, 244, 0.3);
+            border-radius: 12px;
+            margin: 1rem 0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .thinking-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .thinking-dots span {
+            width: 8px;
+            height: 8px;
+            background: rgba(66, 133, 244, 0.8);
+            border-radius: 50%;
+            animation: bounce-dot 1.4s infinite ease-in-out both;
+        }
+
+        .thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce-dot {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: rgba(16, 19, 46, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: slideUp 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 400px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.error {
+            border-left: 4px solid #ea4335;
+        }
+
+        .toast.success {
+            border-left: 4px solid #34a853;
+        }
+
+        .toast.info {
+            border-left: 4px solid #4285f4;
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Smooth transitions */
+        .tab-content {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .tab-content.hidden {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        /* Button microinteractions */
+        .btn, .control-btn, .tab-btn, .action-button, .modal-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn:active, .control-btn:active, .modal-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Success animation */
+        @keyframes success-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .success-animation {
+            animation: success-bounce 0.5s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .agent-status-panel {
+                position: static;
+                transform: none;
+                margin: 2rem auto;
+                width: 100%;
+                max-width: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .voice-orb-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    <div class="bg-gradient-2"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 MindBridge</h1>
+            <div class="subtitle">
+                Nima AI • Powered by Google Gemini
+                <span class="live-badge">LIVE</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="conversation">Conversation</button>
+            <button class="tab-btn" data-tab="habits">Habit Tracker</button>
+            <button class="tab-btn" data-tab="schedules">Schedules</button>
+        </div>
+
+        <!-- Conversation Tab -->
+        <div id="conversation-tab" class="tab-content">
+            <div class="voice-interface">
+                <!-- Voice Orb -->
+                <div class="voice-orb-container">
+                    <div class="voice-orb" id="voiceOrb">
+                        <div class="orb-text" id="orbText">Tap to speak</div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="voice-controls">
+                    <button class="control-btn" id="micBtn" title="Microphone">🎤</button>
+                    <button class="control-btn" id="stopBtn" title="Stop">✖️</button>
+                </div>
+
+                <!-- Action Button -->
+                <button class="action-button hidden" id="actionBtn">
+                    👋 Greeting
+                </button>
+
+                <!-- Messages -->
+                <div class="messages-container" id="messagesContainer"></div>
+            </div>
+        </div>
+
+        <!-- Agent Status Panel -->
+        <div class="agent-status-panel" id="agentStatusPanel">
+            <!-- Analytics Section -->
+            <div class="analytics-section">
+                <div class="analytics-title">📊 Session Analytics</div>
+                <div class="metric">
+                    <span class="metric-label">Duration</span>
+                    <span class="metric-value" id="sessionDuration">0:00</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Messages</span>
+                    <span class="metric-value" id="messageCount">0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Current Agent</span>
+                    <span class="metric-value" id="currentAgentDisplay">Intake</span>
+                </div>
+            </div>
+
+            <!-- Agent Timeline -->
+            <div class="analytics-section">
+                <div class="analytics-title">🤖 Agent Workflow</div>
+                <div class="agent-timeline" id="agentTimeline">
+                    <div class="timeline-node active" data-agent="intake" title="Intake Agent">I</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-node" data-agent="crisis" title="Crisis Agent">C</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-node" data-agent="resource" title="Resource Agent">R</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-node" data-agent="habit" title="Habit Agent">H</div>
+                    <div class="timeline-connector"></div>
+                    <div class="timeline-node" data-agent="complete" title="Complete">✓</div>
+                </div>
+            </div>
+
+            <!-- Risk Level -->
+            <div class="analytics-section">
+                <div class="analytics-title">⚠️ Risk Assessment</div>
+                <div id="riskLevel">
+                    <span class="risk-indicator risk-none">✓ No Concerns</span>
+                </div>
+            </div>
+
+            <!-- Agent Contributions -->
+            <div class="analytics-section">
+                <div class="analytics-title">🎯 Agent Contributions</div>
+                <div id="agentContributions">
+                    <div style="text-align: center; opacity: 0.5; padding: 0.5rem; font-size: 0.85rem;">
+                        Contributions will appear here...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent History -->
+            <div class="analytics-section" style="border-bottom: none;">
+                <div class="analytics-title">📝 Activity Log</div>
+                <div id="agentHistoryList">
+                    <div style="text-align: center; opacity: 0.5; padding: 0.5rem; font-size: 0.85rem;">
+                        Waiting for conversation...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Habit Tracker Tab -->
+        <div id="habits-tab" class="tab-content hidden">
+            <div id="habitTrackerView"></div>
+        </div>
+
+        <!-- Schedules Tab -->
+        <div id="schedules-tab" class="tab-content hidden">
+            <div id="schedulesView"></div>
+        </div>
+    </div>
+
+    <!-- Privacy Modal -->
+    <div id="privacyModal" class="modal-overlay hidden">
+        <div class="privacy-modal">
+            <h2>🔒 Choose Your Privacy Level</h2>
+            <p class="subtitle">Pick what feels safest. You can always change your mind later.</p>
+            
+            <div class="privacy-options">
+                <div class="privacy-option" data-tier="full_support">
+                    <h3>Full Support</h3>
+                    <p>AI can stay with you the whole way, keeping helpful notes and reminders.</p>
+                </div>
+                
+                <div class="privacy-option" data-tier="assisted_handoff">
+                    <h3>Assisted Handoff</h3>
+                    <p>We'll help connect you to a therapist and smooth the transitions.</p>
+                </div>
+                
+                <div class="privacy-option" data-tier="your_private_notes">
+                    <h3>Your Private Notes</h3>
+                    <p>We keep high-level notes while you stay in control of the details.</p>
+                </div>
+                
+                <div class="privacy-option" data-tier="no_records">
+                    <h3>No Records</h3>
+                    <p>Totally private—nothing saved, just this conversation.</p>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closePrivacyModal()">Cancel</button>
+                <button class="modal-btn confirm" onclick="confirmPrivacySelection()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let sessionId = null;
+        const userId = 'user_' + Math.random().toString(36).substr(2, 9);
+        let isListening = false;
+        let isSpeaking = false;
+        let recognition = null;
+        let synthesis = window.speechSynthesis;
+        let agentHistory = [];
+        
+        // Analytics state
+        let sessionStartTime = Date.now();
+        let messageCount = 0;
+        let currentAgent = 'intake';
+        let completedAgents = [];
+        let riskLevel = 'none';
+
+        // Elements
+        const voiceOrb = document.getElementById('voiceOrb');
+        const orbText = document.getElementById('orbText');
+        const micBtn = document.getElementById('micBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const actionBtn = document.getElementById('actionBtn');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const agentStatusPanel = document.getElementById('agentStatusPanel');
+
+        // Initialize Speech Recognition
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                isListening = true;
+                voiceOrb.classList.add('listening');
+                orbText.textContent = 'Listening...';
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                handleUserSpeech(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                stopListening();
+                
+                // Show user-friendly error based on type
+                if (event.error === 'no-speech') {
+                    showToast('info', 'No Speech Detected', 'We didn\'t hear anything. Please try again.');
+                } else if (event.error === 'audio-capture') {
+                    showToast('error', 'Microphone Error', 'Please check your microphone permissions and try again.');
+                } else if (event.error === 'not-allowed') {
+                    showToast('error', 'Permission Denied', 'Please allow microphone access to use voice features.');
+                } else if (event.error === 'network') {
+                    showToast('error', 'Network Error', 'Please check your internet connection.');
+                } else {
+                    showToast('error', 'Voice Error', 'There was a problem with speech recognition. Please try again.');
+                }
+            };
+
+            recognition.onend = () => {
+                stopListening();
+            };
+        }
+
+        // Toast notification system
+        function showToast(type, title, message, duration = 4000) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: '✓',
+                error: '✗',
+                info: 'ℹ'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || 'ℹ'}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideUp 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Show thinking indicator
+        function showThinking() {
+            const thinking = document.createElement('div');
+            thinking.className = 'thinking-indicator';
+            thinking.id = 'thinkingIndicator';
+            thinking.innerHTML = `
+                <span>Nima is thinking</span>
+                <div class="thinking-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            messagesContainer.appendChild(thinking);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Hide thinking indicator
+        function hideThinking() {
+            const thinking = document.getElementById('thinkingIndicator');
+            if (thinking) {
+                thinking.remove();
+            }
+        }
+
+        // Set orb state
+        function setOrbState(state, text) {
+            voiceOrb.classList.remove('listening', 'speaking');
+            if (state) {
+                voiceOrb.classList.add(state);
+            }
+            orbText.textContent = text;
+        }
+
+        // Event Listeners
+        voiceOrb.addEventListener('click', toggleListening);
+        micBtn.addEventListener('click', toggleListening);
+        stopBtn.addEventListener('click', stopAll);
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.dataset.tab;
+                switchTab(tab);
+            });
+        });
+
+        function switchTab(tab) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`${tab}-tab`).classList.remove('hidden');
+
+            // Load content for non-conversation tabs
+            if (tab === 'habits') {
+                loadHabitTracker();
+            } else if (tab === 'schedules') {
+                loadSchedules();
+            }
+        }
+
+        function toggleListening() {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            if (recognition) {
+                recognition.start();
+                actionBtn.classList.add('hidden');
+            }
+        }
+
+        function stopListening() {
+            isListening = false;
+            voiceOrb.classList.remove('listening');
+            orbText.textContent = 'Tap to speak';
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        function stopAll() {
+            stopListening();
+            stopSpeaking();
+        }
+
+        function stopSpeaking() {
+            if (synthesis) {
+                synthesis.cancel();
+            }
+            isSpeaking = false;
+            voiceOrb.classList.remove('speaking');
+            orbText.textContent = 'Tap to speak';
+        }
+
+        async function handleUserSpeech(transcript) {
+            addMessage('user', transcript);
+            await sendToBackend(transcript);
+        }
+
+        async function sendToBackend(message) {
+            setOrbState('thinking', 'Thinking...');
+            showThinking();
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        message: message,
+                        session_id: sessionId
+                    })
+                });
+
+                hideThinking();
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.session_id) {
+                    sessionId = data.session_id;
+                }
+
+                // Get last assistant message
+                const messages = data.messages || [];
+                const lastMessage = messages[messages.length - 1];
+
+                if (lastMessage && lastMessage.role === 'assistant') {
+                    addMessage('nima', lastMessage.content);
+                    speak(lastMessage.content);
+                    
+                    // Update agent status
+                    updateAgentStatus(data.current_agent);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                hideThinking();
+                setOrbState(null, 'Tap to speak');
+                
+                // Show user-friendly error toast
+                if (!navigator.onLine) {
+                    showToast('error', 'Connection Lost', 'Please check your internet connection and try again.');
+                } else if (error.message.includes('404')) {
+                    showToast('error', 'Service Error', 'The backend service is unavailable. Please try again later.');
+                } else if (error.message.includes('500')) {
+                    showToast('error', 'Server Error', 'Something went wrong on our end. We\'re working to fix it.');
+                } else {
+                    showToast('error', 'Oops!', 'Something went wrong. Please try again in a moment.');
+                }
+                
+                addMessage('nima', 'I apologize for the interruption. Please try speaking to me again in a moment.');
+            }
+        }
+
+        function speak(text) {
+            if (!synthesis) return;
+
+            stopSpeaking();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            utterance.onstart = () => {
+                isSpeaking = true;
+                voiceOrb.classList.add('speaking');
+                orbText.textContent = 'Speaking...';
+            };
+
+            utterance.onend = () => {
+                stopSpeaking();
+            };
+
+            synthesis.speak(utterance);
+        }
+
+        function addMessage(role, content) {
+            const message = document.createElement('div');
+            message.className = `message ${role}`;
+            message.innerHTML = `
+                <div class="message-label">${role === 'nima' ? 'NIMA AI' : 'YOU'}</div>
+                <div class="message-content">${content}</div>
+            `;
+            messagesContainer.appendChild(message);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Update message count for analytics
+            messageCount++;
+            updateAnalytics();
+        }
+
+        // Update analytics dashboard
+        function updateAnalytics() {
+            // Update duration
+            const duration = Math.floor((Date.now() - sessionStartTime) / 1000);
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+            document.getElementById('sessionDuration').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update message count
+            document.getElementById('messageCount').textContent = messageCount;
+            
+            // Update current agent
+            const agentDisplayNames = {
+                'intake': 'Intake',
+                'crisis': 'Crisis',
+                'resource': 'Resource',
+                'habit': 'Habit',
+                'complete': 'Complete'
+            };
+            document.getElementById('currentAgentDisplay').textContent = 
+                agentDisplayNames[currentAgent] || 'Active';
+        }
+
+        // Update agent timeline visualization
+        function updateAgentTimeline(agent) {
+            currentAgent = agent;
+            
+            // Mark previous agents as completed
+            if (!completedAgents.includes(agent)) {
+                completedAgents.push(agent);
+            }
+            
+            // Update timeline nodes
+            const nodes = document.querySelectorAll('.timeline-node');
+            const connectors = document.querySelectorAll('.timeline-connector');
+            
+            const agentOrder = ['intake', 'crisis', 'resource', 'habit', 'complete'];
+            const currentIndex = agentOrder.indexOf(agent);
+            
+            nodes.forEach((node, index) => {
+                node.classList.remove('active', 'completed');
+                if (index < currentIndex) {
+                    node.classList.add('completed');
+                } else if (index === currentIndex) {
+                    node.classList.add('active');
+                }
+            });
+            
+            connectors.forEach((connector, index) => {
+                connector.classList.remove('completed');
+                if (index < currentIndex) {
+                    connector.classList.add('completed');
+                }
+            });
+            
+            updateAnalytics();
+        }
+
+        // Update risk level indicator
+        function updateRiskLevel(level) {
+            riskLevel = level || 'none';
+            const riskContainer = document.getElementById('riskLevel');
+            
+            const riskLabels = {
+                'none': '✓ No Concerns',
+                'low': '⚠️ Low Risk',
+                'moderate': '⚠️ Moderate Risk',
+                'high': '🚨 High Risk',
+                'immediate': '🚨 Immediate Risk'
+            };
+            
+            const riskClasses = {
+                'none': 'risk-none',
+                'low': 'risk-none',
+                'moderate': 'risk-moderate',
+                'high': 'risk-high',
+                'immediate': 'risk-high'
+            };
+            
+            riskContainer.innerHTML = `
+                <span class="risk-indicator ${riskClasses[riskLevel]}">
+                    ${riskLabels[riskLevel]}
+                </span>
+            `;
+        }
+
+        // Update activity log
+        function addActivityLog(agentName, action) {
+            const historyList = document.getElementById('agentHistoryList');
+            
+            // Clear placeholder
+            if (historyList.querySelector('div[style*="text-align"]')) {
+                historyList.innerHTML = '';
+            }
+            
+            const timestamp = new Date().toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            const logItem = document.createElement('div');
+            logItem.className = 'agent-status-item';
+            logItem.style.animation = 'slideIn 0.3s ease';
+            logItem.innerHTML = `
+                <div class="status-indicator"></div>
+                <div class="agent-info">
+                    <h4>${agentName}</h4>
+                    <p>${action} • ${timestamp}</p>
+                </div>
+            `;
+            
+            historyList.insertBefore(logItem, historyList.firstChild);
+            
+            // Keep only last 5 items
+            while (historyList.children.length > 5) {
+                historyList.removeChild(historyList.lastChild);
+            }
+        }
+
+        function updateAgentStatus(agent) {
+            const agentNames = {
+                'intake': 'Intake Agent',
+                'crisis': 'Crisis Agent',
+                'resource': 'Resource Agent',
+                'habit': 'Habit Agent'
+            };
+
+            const agentStatuses = {
+                'intake': 'Gathering context',
+                'crisis': 'Assessing risk level',
+                'resource': 'Matching therapists',
+                'habit': 'Recommending habits'
+            };
+
+            if (agent) {
+                updateAgentTimeline(agent);
+                addActivityLog(
+                    agentNames[agent] || agent,
+                    agentStatuses[agent] || 'Processing'
+                );
+                
+                // Fetch and update contributions
+                if (sessionId) {
+                    fetchAgentContributions();
+                }
+            }
+        }
+
+        // Fetch and display agent contributions
+        async function fetchAgentContributions() {
+            if (!sessionId) return;
+            
+            try {
+                const response = await fetch(`/contributions/${sessionId}`);
+                const data = await response.json();
+                
+                if (data.contributions && data.contributions.length > 0) {
+                    const contributionsContainer = document.getElementById('agentContributions');
+                    contributionsContainer.innerHTML = '';
+                    
+                    data.contributions.forEach(contrib => {
+                        addAgentContribution(contrib.agent, contrib.title, contrib.content);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching contributions:', error);
+            }
+        }
+
+        // Add agent contribution to dashboard
+        function addAgentContribution(agentType, title, content) {
+            const contributionsContainer = document.getElementById('agentContributions');
+            
+            // Clear placeholder
+            if (contributionsContainer.querySelector('div[style*="text-align"]')) {
+                contributionsContainer.innerHTML = '';
+            }
+            
+            const contribution = document.createElement('div');
+            contribution.className = `contribution-item ${agentType}`;
+            contribution.innerHTML = `
+                <div class="contribution-header">
+                    <span class="contribution-badge"></span>
+                    ${title}
+                </div>
+                <div class="contribution-content">${content}</div>
+            `;
+            
+            contributionsContainer.appendChild(contribution);
+        }
+
+        // Start analytics timer
+        setInterval(updateAnalytics, 1000);
+
+        function renderAgentStatus() {
+            if (agentHistory.length === 0) {
+                return; // Keep the placeholder if no agents yet
+            }
+            
+            agentStatusPanel.innerHTML = agentHistory.map(agent => `
+                <div class="agent-status-item">
+                    <div class="status-indicator"></div>
+                    <div class="agent-info">
+                        <h4>${agent.name}</h4>
+                        <p>${agent.status}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadHabitTracker() {
+            // Will be populated from backend
+            document.getElementById('habitTrackerView').innerHTML = `
+                <div style="text-align: center; padding: 4rem;">
+                    <h2 style="margin-bottom: 1rem;">Habit Tracker Coming Soon</h2>
+                    <p style="opacity: 0.7;">Your personalized habit tracking will appear here</p>
+                </div>
+            `;
+        }
+
+        function loadSchedules() {
+            document.getElementById('schedulesView').innerHTML = `
+                <div style="text-align: center; padding: 4rem;">
+                    <h2 style="margin-bottom: 1rem;">Schedules Coming Soon</h2>
+                    <p style="opacity: 0.7;">Your therapy session schedules will appear here</p>
+                </div>
+            `;
+        }
+
+        // Privacy Modal Functions
+        let selectedPrivacyTier = 'your_private_notes';
+
+        function showPrivacyModal() {
+            document.getElementById('privacyModal').classList.remove('hidden');
+            
+            // Add click handlers for privacy options
+            document.querySelectorAll('.privacy-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all
+                    document.querySelectorAll('.privacy-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    selectedPrivacyTier = this.dataset.tier;
+                    console.log('Selected privacy tier:', selectedPrivacyTier);
+                });
+            });
+            
+            // Pre-select "Your Private Notes" (default)
+            setTimeout(() => {
+                const defaultOption = document.querySelector('.privacy-option[data-tier="your_private_notes"]');
+                if (defaultOption) {
+                    defaultOption.classList.add('selected');
+                }
+            }, 100);
+        }
+
+        function closePrivacyModal() {
+            console.log('closePrivacyModal called');
+            const modal = document.getElementById('privacyModal');
+            console.log('Modal element found:', modal);
+            if (modal) {
+                console.log('Adding hidden class to modal');
+                modal.classList.add('hidden');
+                console.log('Modal classes after close:', modal.className);
+            } else {
+                console.error('Modal element not found!');
+            }
+        }
+
+        async function confirmPrivacySelection() {
+            console.log('Confirming privacy selection:', selectedPrivacyTier);
+            
+            if (!selectedPrivacyTier) {
+                showToast('info', 'Selection Required', 'Please select a privacy level first.');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/privacy/set', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        session_id: sessionId,
+                        privacy_tier: selectedPrivacyTier
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Privacy API response:', data);
+                
+                if (data.success) {
+                    console.log('Privacy set successfully, closing modal...');
+                    
+                    // Close modal FIRST
+                    closePrivacyModal();
+                    
+                    // Then store and show message
+                    localStorage.setItem('privacy_set', 'true');
+                    localStorage.setItem('privacy_tier', selectedPrivacyTier);
+                    
+                    // Add message after a small delay
+                    setTimeout(() => {
+                        const tierName = selectedPrivacyTier.replace(/_/g, ' ');
+                        addMessage('nima', `Perfect! Your privacy is set to ${tierName}. You can change this anytime.`);
+                    }, 300);
+                } else {
+                    console.error('Privacy API returned unsuccessful response');
+                    closePrivacyModal();
+                }
+            } catch (error) {
+                console.error('Error setting privacy:', error);
+                // Close anyway on error
+                closePrivacyModal();
+            }
+        }
+
+        // Trigger privacy modal when needed (from backend response)
+        function checkForPrivacyPrompt(data) {
+            // Show privacy modal after intake is complete (before crisis assessment)
+            if (data && data.current_agent === 'crisis' && !localStorage.getItem('privacy_set')) {
+                showPrivacyModal();
+            }
+        }
+
+        // Habit Tracker Integration
+        function loadHabitTracker() {
+            if (!sessionId) {
+                document.getElementById('habitTrackerView').innerHTML = `
+                    <div style="text-align: center; padding: 4rem;">
+                        <h2 style="margin-bottom: 1rem;">Start a Conversation First</h2>
+                        <p style="opacity: 0.7;">Complete your conversation with Nima to get personalized habit recommendations.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            fetch(`/habits/${sessionId}`)
+                .then(res => res.json())
+                .then(data => renderHabits(data))
+                .catch(err => {
+                    console.error('Error loading habits:', err);
+                    document.getElementById('habitTrackerView').innerHTML = `
+                        <div style="text-align: center; padding: 4rem;">
+                            <h2 style="margin-bottom: 1rem;">No Habits Yet</h2>
+                            <p style="opacity: 0.7;">Complete your conversation to get recommendations.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        function renderHabits(data) {
+            const container = document.getElementById('habitTrackerView');
+            
+            if (!data.habits || data.habits.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 4rem;">
+                        <h2 style="margin-bottom: 1rem;">No Habits Yet</h2>
+                        <p style="opacity: 0.7;">Complete your conversation to get recommendations.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const totalHabits = data.habits.length;
+
+            container.innerHTML = `
+                <div style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 159, 64, 0.3), rgba(255, 99, 132, 0.2)); border: 1px solid rgba(255, 159, 64, 0.4); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem;">
+                        <div style="width: 80px; height: 100px; background: linear-gradient(180deg, rgba(255, 159, 64, 0.9), rgba(255, 99, 71, 0.8)); border-radius: 15px 15px 30px 30px; display: flex; align-items: center; justify-content: center; flex-direction: column; box-shadow: 0 8px 32px rgba(255, 159, 64, 0.3);">
+                            <div style="font-size: 2rem; font-weight: 700; color: white;">4</div>
+                            <div style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">DAYS</div>
+                        </div>
+                        <div>
+                            <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">Keep the momentum!</h2>
+                            <p style="opacity: 0.8;">Your specialist will love seeing how consistent you've been.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                        ${data.habits.map(habit => `
+                            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                    <h4 style="font-size: 1.1rem; font-weight: 600;">${habit.name}</h4>
+                                    <div style="background: rgba(67, 255, 163, 0.15); border: 1px solid rgba(67, 255, 163, 0.3); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 600;">0 days streak</div>
+                                </div>
+                                <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.5; margin-bottom: 1rem;">${habit.description}</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" data-habit-id="${habit.id}" onchange="handleHabitCheck(this)" style="width: 20px; height: 20px; cursor: pointer;">
+                                        <span style="font-size: 0.85rem; font-weight: 600;">Completed today</span>
+                                    </label>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        async function handleHabitCheck(checkbox) {
+            const habitId = checkbox.dataset.habitId;
+            const completed = checkbox.checked;
+
+            try {
+                const response = await fetch('/habits/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        habit_id: habitId,
+                        completed: completed
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    checkbox.parentElement.style.color = completed ? 'rgba(67, 255, 163, 1)' : '';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                checkbox.checked = !completed;
+            }
+        }
+
+        // Initial greeting
+        window.addEventListener('load', () => {
+            addMessage('nima', "Hi, I'm Nima AI from MindBridge. I'm here to listen and support you on your mental wellness journey. Tap the microphone when you're ready to talk.");
+            
+            // Store sessionId in localStorage when created
+            if (sessionId) {
+                localStorage.setItem('sessionId', sessionId);
+            }
+        });
+    </script>
+</body>
+</html>
+

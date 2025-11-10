@@ -97,6 +97,8 @@ Make intelligent routing decisions based on conversation state."""
     def _determine_next_agent(self, state: AgentState) -> str:
         """
         Determine which agent should process next based on state.
+
+        Flow: Intake → Crisis (with category suggestion) → Resource (filtered) → Habit → Complete
         """
         # Check workflow flags
         intake_complete = state.agent_data.get("intake_complete", False)
@@ -104,23 +106,24 @@ Make intelligent routing decisions based on conversation state."""
         resource_complete = state.agent_data.get("resource_complete", False)
         habit_complete = state.agent_data.get("habit_complete", False)
 
-        # Sequential workflow
+        # Sequential workflow: Intake → Crisis → Resource → Habit → Complete
         if not intake_complete:
             return "intake"
 
         if not crisis_complete:
             return "crisis"
 
-        # Check if therapist matching is needed
-        needs_therapist = state.agent_data.get("needs_therapist", False)
-        if needs_therapist and not resource_complete:
+        # After crisis assessment, show counselor options
+        # (Crisis agent suggests a category, Resource agent filters by it)
+        if not resource_complete:
             return "resource"
 
-        # Offer habit recommendations
+        # After counselor matching, provide habit recommendations
+        # (Habit agent recommends habits based on selected category)
         if not habit_complete:
             return "habit"
 
-        # All done
+        # All done - user has counselors and habits
         return "complete"
 
     def _generate_completion_message(self, state: AgentState) -> str:
@@ -128,16 +131,22 @@ Make intelligent routing decisions based on conversation state."""
         Generate final message when workflow is complete.
         """
         matched = state.agent_data.get("therapist_match_found", False)
-        has_habits = len(state.agent_data.get("recommended_habits", [])) > 0
+        selected_category = state.agent_data.get("selected_category") or \
+                          state.agent_data.get("suggested_category", "general")
+        habits_recommended = state.agent_data.get("habit_complete", False)
 
-        message = "You've taken an important step today. "
+        message = "You've taken an important step today by reaching out. "
 
         if matched:
-            message += "I've connected you with a therapist who's ready to help. "
+            message += f"I've connected you with {selected_category} counselors who are ready to help you. "
+            message += "Feel free to reach out to any of them to get started. "
+        else:
+            message += "We're here to support you in finding the right counselor. "
 
-        if has_habits:
-            message += "Start with those small habits we discussed - they can make a real difference. "
+        if habits_recommended:
+            message += "In the meantime, the habits I've shared can help you start making progress right away. "
 
-        message += "Remember, you don't have to face this alone."
+        message += "\n\nRemember, you don't have to face this alone. "
+        message += "Take care, and reach out whenever you need support. 💙"
 
         return message

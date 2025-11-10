@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindBridge - AI-Powered Mental Health Support | Cloud Run Hackathon</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-gradient-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.8), transparent); /* Google Blue */
+            top: 10%;
+            left: 10%;
+        }
+
+        .bg-gradient-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(52, 168, 83, 0.6), transparent); /* Google Green */
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -10s;
+        }
+
+        .bg-gradient-3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(251, 188, 5, 0.6), transparent); /* Google Yellow */
+            top: 50%;
+            right: 20%;
+            animation-delay: -5s;
+        }
+
+        .bg-gradient-4 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(234, 67, 53, 0.5), transparent); /* Google Red */
+            top: 60%;
+            left: 15%;
+            animation-delay: -15s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 2rem 6rem 2rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(66, 133, 244, 0.2);
+            border: 1px solid rgba(66, 133, 244, 0.5);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 2rem;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 75%, #ea4335 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(66, 133, 244, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(66, 133, 244, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(66, 133, 244, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(66, 133, 244, 0.7);
+            transform: translateY(-3px);
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .tech-stack h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+            margin-bottom: 2rem;
+        }
+
+        .tech-logos {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tech-logo {
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tech-logo:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(66, 133, 244, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Features */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #34a853 0%, #4285f4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .features-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            margin-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+            border-color: rgba(66, 133, 244, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(66, 133, 244, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            opacity: 0.8;
+            line-height: 1.7;
+        }
+
+        /* Architecture */
+        .architecture {
+            padding: 6rem 2rem;
+            background: rgba(16, 19, 46, 0.3);
+        }
+
+        .architecture-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .architecture h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        .architecture-diagram {
+            margin-top: 3rem;
+            padding: 3rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        .architecture-diagram pre {
+            color: rgba(67, 255, 163, 0.9);
+            line-height: 1.8;
+            font-size: 0.9rem;
+        }
+
+        /* Stats */
+        .stats {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ea4335 0%, #fbbc05 50%, #34a853 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.1));
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: rgba(66, 133, 244, 1);
+        }
+
+        .footer p {
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            animation: bounce 2s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 1;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            font-weight: 600;
+            color: rgba(66, 133, 244, 1);
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-left: 3px solid rgba(66, 133, 244, 1);
+            border-bottom: 3px solid rgba(66, 133, 244, 1);
+            transform: rotate(-45deg);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tech-logos {
+                gap: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scroll-indicator {
+                bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="bg-gradient bg-gradient-1"></div>
+        <div class="bg-gradient bg-gradient-2"></div>
+        <div class="bg-gradient bg-gradient-3"></div>
+        <div class="bg-gradient bg-gradient-4"></div>
+    </div>
+
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">
+                🏆 Cloud Run Hackathon 2025 - AI Agents Category
+            </div>
+
+            <h1>🧠 MindBridge</h1>
+
+            <p>
+                AI-powered mental health support using autonomous multi-agent orchestration.
+                Built with Google Gemini and deployed on Cloud Run.
+            </p>
+
+            <div class="hero-cta">
+                <a href="/app" class="btn btn-primary">
+                    Try Live Demo →
+                </a>
+                <a href="https://github.com/SAMK-online/MindBridge-ClaudRunHack" target="_blank" class="btn btn-secondary">
+                    View Code on GitHub
+                </a>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="scroll-indicator" onclick="document.querySelector('.tech-stack').scrollIntoView({behavior: 'smooth'})">
+                <span>Scroll</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- Tech Stack -->
+        <section class="tech-stack">
+            <h3>Built With</h3>
+            <div class="tech-logos">
+                <div class="tech-logo">☁️ Google Cloud Run</div>
+                <div class="tech-logo">🤖 Google Gemini 2.5</div>
+                <div class="tech-logo">🐍 Python + FastAPI</div>
+                <div class="tech-logo">🎯 Multi-Agent ADK</div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features">
+            <h2>Autonomous AI Agents</h2>
+            <p class="features-subtitle">
+                Five specialized agents working together to provide comprehensive mental health support
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Intake Agent</h3>
+                    <p>Warm, empathetic conversational onboarding using Gemini 2.5 Flash (Thinking Mode). Creates a safe space for users to share their concerns at their own pace.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h3>Crisis Agent</h3>
+                    <p>ReAct-based risk assessment with 5-level classification. Instantly detects crisis indicators and provides appropriate emergency resources.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Resource Agent</h3>
+                    <p>Intelligent therapist matching using Gemini Pro for complex reasoning. Searches 9 specializations and autonomously recommends best matches.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Habit Agent</h3>
+                    <p>Evidence-based therapeutic habits tailored to user needs. Deterministic recommendations with streak tracking and progress monitoring.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Coordinator</h3>
+                    <p>Orchestrates the entire multi-agent workflow. Manages transitions between agents and ensures smooth, contextual conversations.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎤</div>
+                    <h3>Voice Interface</h3>
+                    <p>Speech-to-text and text-to-speech integration. Beautiful animated orb provides real-time visual feedback during conversations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture -->
+        <section class="architecture">
+            <div class="architecture-content">
+                <h2>Multi-Agent Architecture</h2>
+                <p class="features-subtitle">
+                    Coordinated autonomous agents powered by Google Gemini
+                </p>
+
+                <div class="architecture-diagram">
+                    <pre>
+┌─────────────────────────────────────────────────┐
+│ Coordinator Agent (Gemini 2.5 Pro Thinking)   │
+│ • Workflow orchestration                       │
+│ • Agent routing & transitions                  │
+│ • State management                             │
+└────────────┬────────────────────────────────────┘
+             │
+    ┌────────┼────────┬───────────┬──────────┐
+    ▼        ▼        ▼           ▼          ▼
+┌──────────┐┌────────┐┌──────────┐┌────────┐
+│ Intake   ││Crisis  ││Resource  ││Habit   │
+│ Agent    ││Agent   ││Agent     ││Agent   │
+│          ││        ││          ││        │
+│Gemini    ││Gemini  ││Gemini    ││Gemini  │
+│2.5 Flash ││2.5     ││2.5 Pro   ││2.5     │
+│(Thinking)││Flash   ││(Thinking)││Flash   │
+└──────────┘└────────┘└──────────┘└────────┘
+     │           │          │          │
+     └───────────┴──────────┴──────────┘
+                    │
+            ┌───────▼────────┐
+            │  Cloud Run     │
+            │  • FastAPI     │
+            │  • Auto-scale  │
+            │  • 2GB RAM     │
+            │  • 2 vCPU      │
+            └────────────────┘
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>5</h3>
+                    <p>Autonomous Agents</p>
+                </div>
+                <div class="stat-item">
+                    <h3>9</h3>
+                    <p>Counselor Categories</p>
+                </div>
+                <div class="stat-item">
+                    <h3>4</h3>
+                    <p>Privacy Tiers</p>
+                </div>
+                <div class="stat-item">
+                    <h3>27</h3>
+                    <p>Evidence-Based Habits</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Experience the Future of Mental Health Support</h2>
+            <p>
+                Try MindBridge now and see how multi-agent AI orchestration can provide empathetic, intelligent support at scale.
+            </p>
+
+            <div class="hero-cta">
+                <a href="/app" class="btn btn-primary">
+                    Launch App →
+                </a>
+                <a href="https://github.com/SAMK-online/MindBridge-ClaudRunHack" target="_blank" class="btn btn-secondary">
+                    View Source Code
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="https://github.com/SAMK-online/MindBridge-ClaudRunHack">GitHub</a>
+                <a href="/app">Live Demo</a>
+                <a href="https://cloud.google.com/run">Cloud Run</a>
+                <a href="https://ai.google.dev/">Google Gemini</a>
+            </div>
+            <p>Built for Google Cloud Run Hackathon 2025 | AI Agents Category</p>
+            <p style="margin-top: 1rem; opacity: 0.4;">Project ID: nimacareai | Powered by Google Gemini & Cloud Run</p>
+        </footer>
+    </div>
+
+    <script>
+        // Hide scroll indicator when user scrolls
+        let scrollIndicator = document.querySelector('.scroll-indicator');
+        let hasScrolled = false;
+
+        window.addEventListener('scroll', function() {
+            if (!hasScrolled && window.scrollY > 100) {
+                hasScrolled = true;
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => {
+                    scrollIndicator.style.display = 'none';
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
+

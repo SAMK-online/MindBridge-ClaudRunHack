@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <style>
+        .habit-tracker-container {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .momentum-card {
+            background: linear-gradient(135deg, rgba(255, 159, 64, 0.3), rgba(255, 99, 132, 0.2));
+            border: 1px solid rgba(255, 159, 64, 0.4);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .jar-icon {
+            width: 100px;
+            height: 120px;
+            background: linear-gradient(180deg, rgba(255, 159, 64, 0.9), rgba(255, 99, 71, 0.8));
+            border-radius: 15px 15px 30px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(255, 159, 64, 0.3);
+        }
+
+        .jar-icon::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            width: 60px;
+            height: 20px;
+            background: rgba(255, 159, 64, 0.7);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .jar-days {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .jar-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.25rem;
+        }
+
+        .momentum-info h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .momentum-info p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h3 {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .reset-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(124, 107, 255, 0.5);
+        }
+
+        .habits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .habit-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .habit-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(124, 107, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .habit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .habit-title {
+            flex: 1;
+        }
+
+        .habit-title h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .habit-streak {
+            background: rgba(67, 255, 163, 0.15);
+            border: 1px solid rgba(67, 255, 163, 0.3);
+            border-radius: 999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .habit-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .habit-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .completion-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .completion-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: rgba(124, 107, 255, 0.8);
+        }
+
+        .completion-checkbox label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .habit-card {
+            animation: slideInUp 0.4s ease;
+        }
+
+        .habit-card:nth-child(2) { animation-delay: 0.1s; }
+        .habit-card:nth-child(3) { animation-delay: 0.2s; }
+        .habit-card:nth-child(4) { animation-delay: 0.3s; }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .empty-state p {
+            opacity: 0.7;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="habit-tracker-container" id="habitTrackerContainer">
+        <!-- Will be populated dynamically -->
+    </div>
+
+    <script>
+        // Fetch and display habits
+        async function loadHabits(sessionId) {
+            try {
+                const response = await fetch(`/habits/${sessionId}`);
+                const data = await response.json();
+                
+                renderHabitTracker(data);
+            } catch (error) {
+                console.error('Error loading habits:', error);
+                renderEmptyState();
+            }
+        }
+
+        function renderHabitTracker(data) {
+            const container = document.getElementById('habitTrackerContainer');
+            
+            if (!data.habits || data.habits.length === 0) {
+                renderEmptyState();
+                return;
+            }
+
+            // Calculate stats
+            const totalHabits = data.habits.length;
+            const completedToday = 0; // Will be tracked from completions
+            const longestStreak = Math.max(...data.habits.map(h => Math.floor(Math.random() * 10))); // Mock data
+
+            container.innerHTML = `
+                <!-- Momentum Card -->
+                <div class="momentum-card">
+                    <div class="jar-icon">
+                        <div class="jar-days">${longestStreak}</div>
+                        <div class="jar-label">DAYS</div>
+                    </div>
+                    <div class="momentum-info">
+                        <h2>Keep the momentum!</h2>
+                        <p>Your specialist will love seeing how consistent you've been.</p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">0%</div>
+                        <div class="stat-label">Completion rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0/${totalHabits}</div>
+                        <div class="stat-label">Completed today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${longestStreak} days</div>
+                        <div class="stat-label">Longest streak</div>
+                    </div>
+                </div>
+
+                <!-- Section Header -->
+                <div class="section-header">
+                    <h3>Keep tabs on the routines you're testing until your specialist checks in.</h3>
+                    <button class="reset-btn">Reset today</button>
+                </div>
+
+                <!-- Habits Grid -->
+                <div class="habits-grid">
+                    ${data.habits.map((habit, index) => `
+                        <div class="habit-card">
+                            <div class="habit-header">
+                                <div class="habit-title">
+                                    <h4>${habit.name}</h4>
+                                </div>
+                                <div class="habit-streak">${Math.floor(Math.random() * 5)} days streak</div>
+                            </div>
+                            <div class="habit-description">
+                                ${habit.description}
+                            </div>
+                            <div class="habit-footer">
+                                <div class="completion-checkbox">
+                                    <input type="checkbox" id="habit-${habit.id}" data-habit-id="${habit.id}">
+                                    <label for="habit-${habit.id}">Completed today</label>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Add event listeners for checkboxes
+            document.querySelectorAll('.completion-checkbox input').forEach(checkbox => {
+                checkbox.addEventListener('change', handleHabitCompletion);
+            });
+        }
+
+        function renderEmptyState() {
+            const container = document.getElementById('habitTrackerContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h3>No habits yet</h3>
+                    <p>Complete your conversation with Nima to get personalized habit recommendations.</p>
+                </div>
+            `;
+        }
+
+        async function handleHabitCompletion(event) {
+            const habitId = event.target.dataset.habitId;
+            const completed = event.target.checked;
+            const sessionId = localStorage.getItem('sessionId');
+
+            if (!sessionId) {
+                console.error('No session ID found');
+                return;
+            }
+
+            try {
+                const response = await fetch('/habits/complete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        habit_id: habitId,
+                        completed: completed
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Show success feedback
+                    event.target.parentElement.style.color = completed ? 'rgba(67, 255, 163, 1)' : '';
+                }
+            } catch (error) {
+                console.error('Error updating habit:', error);
+                event.target.checked = !completed; // Revert on error
+            }
+        }
+
+        // Export function for external use
+        window.loadHabitTracker = loadHabits;
+    </script>
+</body>
+</html>
+
