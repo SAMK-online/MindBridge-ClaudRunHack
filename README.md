@@ -1,22 +1,31 @@
-# NimaCare - AI-Powered Mental Health Support 🧠
+# MindBridge - AI-Powered Mental Health Support 🧠
 
 > **Democratizing mental health support through Google Gemini-powered multi-agent AI system**
 
 [![Built with Gemini](https://img.shields.io/badge/Google-Gemini-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
 [![Cloud Run](https://img.shields.io/badge/Cloud-Run-4285F4?style=for-the-badge&logo=google-cloud)](https://cloud.google.com/run)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-00C853?style=for-the-badge&logo=google-cloud)](https://mindbridge-283246315055.us-central1.run.app)
 
 **Cloud Run Hackathon Submission - AI Agents Category**
+
+## 🌐 Live Demo
+
+**🚀 [Try MindBridge Live](https://mindbridge-283246315055.us-central1.run.app)** - Experience the multi-agent AI system in action!
+
+- **Landing Page**: https://mindbridge-283246315055.us-central1.run.app/
+- **Voice Interface**: https://mindbridge-283246315055.us-central1.run.app/app
+- **API Docs**: https://mindbridge-283246315055.us-central1.run.app/docs
 
 ---
 
 ## 🎯 Mission
 
-Every year, millions struggle with mental health challenges but can't access professional support due to cost, availability, or stigma. **NimaCare** bridges this gap by connecting people who can't afford therapy with volunteer therapists—guided by an autonomous AI support system powered by Google Gemini.
+Every year, millions struggle with mental health challenges but can't access professional support due to cost, availability, or stigma. **MindBridge** bridges this gap by connecting people who can't afford therapy with volunteer therapists—guided by an autonomous AI support system powered by Google Gemini.
 
-## ✨ What Makes NimaCare Different
+## ✨ What Makes MindBridge Different
 
-NimaCare demonstrates **true autonomous multi-agent AI**:
+MindBridge demonstrates **true autonomous multi-agent AI**:
 
 - 🤝 **Empathetic Intake** - Warm conversational onboarding that builds trust
 - 🚨 **Instant Crisis Detection** - Gemini-powered reasoning detects risk indicators in real-time

@@ -117,9 +117,9 @@ gcloud run deploy ${SERVICE_NAME} \
   --timeout 300 \
   --max-instances 10 \
   --min-instances 0 \
+  --port 8080 \
   --set-env-vars GOOGLE_API_KEY="${GOOGLE_API_KEY}" \
-  --set-env-vars GOOGLE_CLOUD_PROJECT="${PROJECT_ID}" \
-  --set-env-vars PORT="8080"
+  --set-env-vars GOOGLE_CLOUD_PROJECT="${PROJECT_ID}"
 
 # Check if deployment was successful
 if [ $? -eq 0 ]; then
