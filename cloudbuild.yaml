@@ -1,0 +1,35 @@
+# Cloud Build configuration for Cloud Run deployment
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA', '.']
+
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA']
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'nimacare-api'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'GOOGLE_API_KEY=${_GOOGLE_API_KEY}'
+
+images:
+  - 'gcr.io/$PROJECT_ID/nimacare:$COMMIT_SHA'
+
+substitutions:
+  _GOOGLE_API_KEY: '' # Set via gcloud builds submit --substitutions
+
+options:
+  logging: CLOUD_LOGGING_ONLY
