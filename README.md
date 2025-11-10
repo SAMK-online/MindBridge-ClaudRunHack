@@ -33,11 +33,11 @@ NimaCare demonstrates **true autonomous multi-agent AI**:
              │
     ┌────────┼────────┬───────────┬──────────┐
     ▼        ▼        ▼           ▼          ▼
-┌────────┐┌────────┐┌──────────┐┌────────┐
-│Intake  ││Crisis  ││Resource  ││Habit   │
-│Agent   ││Agent   ││Agent     ││Agent   │
-│(2.0)   ││(2.0)   ││(Thinking)││(2.0)   │
-└────────┘└────────┘└──────────┘└────────┘
+┌──────────┐┌────────┐┌──────────┐┌────────┐
+│ Intake   ││Crisis  ││Resource  ││Habit   │
+│ Agent    ││Agent   ││Agent     ││Agent   │
+│(Thinking)││(2.0)   ││(Thinking)││(2.0)   │
+└──────────┘└────────┘└──────────┘└────────┘
 ```
 
 ### Agent Responsibilities
@@ -45,7 +45,7 @@ NimaCare demonstrates **true autonomous multi-agent AI**:
 | Agent | Model | Purpose |
 |-------|-------|---------|
 | **Coordinator** | Gemini 2.0 Flash (Thinking) | Orchestrates workflow and agent coordination |
-| **Intake Agent** | Gemini 2.0 Flash | Conducts empathetic, stage-aware conversations |
+| **Intake Agent** | Gemini 2.0 Flash (Thinking) | Conducts empathetic, emotionally-aware conversations with deep understanding |
 | **Crisis Agent** | Gemini 2.0 Flash | ReAct-based risk assessment (5 levels: NONE → IMMEDIATE) |
 | **Resource Agent** | Gemini 2.0 Flash (Thinking) | Autonomous therapist search and intelligent matching |
 | **Habit Agent** | Gemini 2.0 Flash | Adaptive habit recommendations and tracking |
