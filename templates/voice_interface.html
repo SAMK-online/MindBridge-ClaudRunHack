@@ -503,6 +503,10 @@
 
         .message-content {
             line-height: 1.6;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+            max-width: 100%;
         }
 
         /* Hidden sections */
@@ -1225,10 +1229,59 @@
             }
         }
 
+        function speakInChunks(text) {
+            if (!synthesis) return;
+            
+            // Split text into sentences or chunks at punctuation
+            const chunks = text.match(/[^.!?]+[.!?]+/g) || [text];
+            let currentChunk = 0;
+            
+            function speakNextChunk() {
+                if (currentChunk >= chunks.length) {
+                    stopSpeaking();
+                    return;
+                }
+                
+                const utterance = new SpeechSynthesisUtterance(chunks[currentChunk].trim());
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                if (currentChunk === 0) {
+                    utterance.onstart = () => {
+                        isSpeaking = true;
+                        voiceOrb.classList.add('speaking');
+                        orbText.textContent = 'Speaking...';
+                    };
+                }
+                
+                utterance.onend = () => {
+                    currentChunk++;
+                    speakNextChunk();
+                };
+                
+                utterance.onerror = (event) => {
+                    console.error('Speech error:', event);
+                    stopSpeaking();
+                };
+                
+                synthesis.speak(utterance);
+            }
+            
+            speakNextChunk();
+        }
+
         function speak(text) {
             if (!synthesis) return;
 
             stopSpeaking();
+            
+            // Handle long text by chunking (some browsers have character limits)
+            const maxLength = 200; // Chrome/Safari limit
+            if (text.length > maxLength) {
+                speakInChunks(text);
+                return;
+            }
             
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.rate = 0.9;
