@@ -1,4 +1,4 @@
-# MindBridge - AI-Powered Mental Health Support 🧠
+# NimaAI - AI-Powered Mental Health Support 🧠
 
 > **Democratizing mental health support through Google Gemini-powered multi-agent AI system**
 
@@ -11,7 +11,7 @@
 
 ## 🌐 Live Demo
 
-**🚀 [Try MindBridge Live](https://mindbridge-283246315055.us-central1.run.app)** - Experience the multi-agent AI system in action!
+**🚀 [Try NimaAI Live](https://mindbridge-283246315055.us-central1.run.app)** - Experience the multi-agent AI system in action!
 
 - **Landing Page**: https://mindbridge-283246315055.us-central1.run.app/
 - **Voice Interface**: https://mindbridge-283246315055.us-central1.run.app/app
@@ -21,11 +21,11 @@
 
 ## 🎯 Mission
 
-Every year, millions struggle with mental health challenges but can't access professional support due to cost, availability, or stigma. **MindBridge** bridges this gap by connecting people who can't afford therapy with volunteer therapists—guided by an autonomous AI support system powered by Google Gemini.
+Every year, millions struggle with mental health challenges but can't access professional support due to cost, availability, or stigma. **NimaAI** bridges this gap by connecting people who can't afford therapy with volunteer therapists—guided by an autonomous AI support system powered by Google Gemini.
 
-## ✨ What Makes MindBridge Different
+## ✨ What Makes NimaAI Different
 
-MindBridge demonstrates **true autonomous multi-agent AI**:
+NimaAI demonstrates **true autonomous multi-agent AI**:
 
 - 🤝 **Empathetic Intake** - Warm conversational onboarding that builds trust
 - 🚨 **Instant Crisis Detection** - Gemini-powered reasoning detects risk indicators in real-time
@@ -53,18 +53,19 @@ MindBridge demonstrates **true autonomous multi-agent AI**:
 
 | Agent | Model | Purpose |
 |-------|-------|---------|
-| **Coordinator** | Gemini 2.0 Flash (Thinking) | Orchestrates workflow and agent coordination |
-| **Intake Agent** | Gemini 2.0 Flash (Thinking) | Conducts empathetic, emotionally-aware conversations with deep understanding |
-| **Crisis Agent** | Gemini 2.0 Flash | ReAct-based risk assessment (5 levels: NONE → IMMEDIATE) |
-| **Resource Agent** | Gemini 2.0 Flash (Thinking) | Autonomous therapist search and intelligent matching |
-| **Habit Agent** | Gemini 2.0 Flash | Adaptive habit recommendations and tracking |
+| **Coordinator** | Gemini 2.5 Pro | Orchestrates workflow and agent coordination |
+| **Intake Agent** | Gemini 2.5 Pro | Conducts empathetic, emotionally-aware conversations with deep understanding |
+| **Crisis Agent** | Gemini 2.5 Flash | ReAct-based risk assessment (5 levels: NONE → IMMEDIATE) |
+| **Resource Agent** | Gemini 2.5 Pro | Autonomous therapist search and intelligent matching from 20-person database |
+| **Habit Agent** | Gemini 2.5 Flash | Adaptive habit recommendations and tracking |
+| **Support Group Agent** | Gemini 2.5 Flash | Smart peer matching across 11 support groups |
 
 ## 🚀 Tech Stack
 
 ### AI & Models
-- **Google Gemini 2.0 Flash (Thinking Mode)** - Complex reasoning for coordination and matching
-- **Google Gemini 2.0 Flash** - Fast, efficient responses for intake, crisis, and habits
-- **Multi-Agent Pattern** - Coordinated autonomous agents
+- **Google Gemini 2.5 Pro** - Complex reasoning for coordination, intake, and therapist matching
+- **Google Gemini 2.5 Flash** - Fast, efficient responses for crisis assessment, habits, and support groups
+- **Multi-Agent Pattern** - 6 coordinated autonomous agents
 
 ### Backend
 - **Python 3.11** - Core backend language
@@ -256,17 +257,19 @@ User: "I can't do this anymore..."
 
 ### Requirements Met
 
-✅ **Multi-Agent System**: 5 autonomous agents coordinated via Gemini
-✅ **Gemini Models**: Uses both Gemini 1.5 Pro and Flash
+✅ **Multi-Agent System**: 6 autonomous agents coordinated via Gemini
+✅ **Gemini Models**: Uses both Gemini 2.5 Pro and Flash
 ✅ **Cloud Run Deployment**: Fully containerized, auto-scaling
 ✅ **Real-World Problem**: Addresses mental health accessibility crisis
 ✅ **Agent Communication**: Coordinator orchestrates sequential workflow
 
 ### Bonus Points
 
-✅ **Multiple Gemini Models**: Pro for complex reasoning, Flash for speed
+✅ **Multiple Gemini Models**: 2.5 Pro for complex reasoning, 2.5 Flash for speed
 ✅ **Production-Ready**: Environment configs, error handling, health checks
 ✅ **Scalable Architecture**: Stateless agents, container-based deployment
+✅ **Voice Interface**: Natural speech-to-text and text-to-speech integration
+✅ **Interactive UI**: Professional modal-based booking flow
 
 ## 🤝 Contributing
 
